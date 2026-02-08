@@ -10,18 +10,22 @@
 <body>
     <div class="container">
         <h1>Donate Now</h1>
-        <form id="donateForm" action="process_donation.php" method="POST">
+        <form id="donateForm" action="backend/initiate_donation.php" method="POST">
             <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                <label for="fname">First Name:</label>
+                <input type="text" name="fname" id="fname" class="form-control" placeholder="First Name" required>
+            </div>
+            <div class="form-group">
+                <label for="lname">Last Name:</label>
+                <input type="text" name="lname" id="lname" class="form-control" placeholder="Last Name" required>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+                <input type="email" name="email" id="email" class="form-control" placeholder="Your Email" required>
             </div>
             <div class="form-group">
-                <label for="amount">Donation Amount:</label>
-                <input type="number" name="amount" class="form-control" placeholder="Amount" required>
+                <label for="custom_amount">Donation Amount (GH₵):</label>
+                <input type="number" name="custom_amount" id="custom_amount" class="form-control" placeholder="Amount" step="0.01" min="1" required>
             </div>
             <button type="submit" class="btn btn-primary">Donate Now</button>
         </form>

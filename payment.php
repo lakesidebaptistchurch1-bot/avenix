@@ -81,7 +81,7 @@ JavaScript Functionalities:
             <nav class="navbar navbar-expand-lg">
                 <div class="container">
                     <!-- Logo Start -->
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="index-slider.html">
                         <img src="images/LBC LOGO.png" alt="Logo">
                     </a>
                     <!-- Logo End -->
@@ -576,13 +576,14 @@ JavaScript Functionalities:
             $('#payment-amount').val(amount);
 
             // Auto-fill amount fields
-            $('#mm_amount, #bank_amount, #paystack_amount, #card_amount').val(amount.toFixed(2));
+            $('#mm_amount, #bank_amount, #paystack_amount').val(amount.toFixed(2));
 
-            // Payment method details toggle
+            // Payment method details toggle (method values use underscore, IDs use hyphen)
             $('input[name="payment_method"]').change(function() {
                 $('.payment-details-form').removeClass('active');
                 var method = $(this).val();
-                $('#' + method + '-details').addClass('active');
+                var detailsId = method.replace(/_/g, '-') + '-details';
+                $('#' + detailsId).addClass('active');
             });
 
             // Format phone number input (Ghana format: 0XXXXXXXXX)
@@ -614,8 +615,9 @@ JavaScript Functionalities:
                 $(this).val($(this).val().replace(/\D/g, ''));
             });
 
-            // Validate form before submission
+            // Validate form and submit via AJAX so user sees success/error modal instead of JSON
             $('#paymentForm').on('submit', function(e) {
+                e.preventDefault();
                 var method = $('input[name="payment_method"]:checked').val();
                 var isValid = true;
                 var errorMsg = '';
@@ -680,14 +682,40 @@ JavaScript Functionalities:
                 }
 
                 if (!isValid) {
-                    e.preventDefault();
                     $('#errorMessage').text(errorMsg);
                     $('#errorModal').modal('show');
                     return false;
                 }
 
-                // Show loading modal
                 $('#loadingModal').modal('show');
+                $.ajax({
+                    url: 'backend/process_payment.php',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    dataType: 'json'
+                }).done(function(data) {
+                    $('#loadingModal').modal('hide');
+                    if (data.success) {
+                        $('#successMessage').text(data.message || ('Transaction ID: ' + (data.transaction_id || '')));
+                        $('#successModal').modal('show');
+                        $('#successModal').on('hidden.bs.modal', function () {
+                            window.location.href = 'donation.html';
+                        });
+                    } else {
+                        $('#errorMessage').text(data.error || 'Payment could not be processed.');
+                        $('#errorModal').modal('show');
+                    }
+                }).fail(function(xhr) {
+                    $('#loadingModal').modal('hide');
+                    var msg = 'Request failed. Please try again.';
+                    try {
+                        var j = JSON.parse(xhr.responseText);
+                        if (j.error) msg = j.error;
+                    } catch (err) {}
+                    $('#errorMessage').text(msg);
+                    $('#errorModal').modal('show');
+                });
+                return false;
             });
 
             // Paystack button handler
@@ -753,9 +781,6 @@ JavaScript Functionalities:
                     }
                 });
                 handler.openIframe();
-            });
-                alert('Redirecting to Paystack payment gateway...\n\nName: ' + name + '\nEmail: ' + email + '\nAmount: GH₵' + amount);
-                // window.location.href = 'https://checkout.paystack.com/...';
             });
         });
     </script>
