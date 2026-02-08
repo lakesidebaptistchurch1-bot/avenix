@@ -7,8 +7,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Get form data
-$amount = isset($_POST['custom_amount']) ? floatval($_POST['custom_amount']) : (isset($_POST['value']) ? floatval($_POST['value']) : 0);
+// Get form data - map preset values (value1, value2, ...) to amounts in GH₵
+$value_map = ['value1' => 100, 'value2' => 200, 'value3' => 300, 'value4' => 400, 'value5' => 500, 'value6' => 600];
+$raw_value = isset($_POST['value']) ? trim($_POST['value']) : '';
+$amount = isset($_POST['custom_amount']) ? floatval($_POST['custom_amount']) : (isset($value_map[$raw_value]) ? $value_map[$raw_value] : floatval($raw_value));
 $fname = isset($_POST['fname']) ? trim($_POST['fname']) : '';
 $lname = isset($_POST['lname']) ? trim($_POST['lname']) : '';
 $name = trim($fname . ' ' . $lname);

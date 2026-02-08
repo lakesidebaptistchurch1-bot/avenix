@@ -52,7 +52,7 @@ JavaScript Functionalities:
 	<!-- Main Custom Css -->
 	<link href="css/custom.css" rel="stylesheet" media="screen">
 </head>
-<body>
+<body class="gallery-ui-pro">
 
     <!-- Preloader Start -->
 	<div class="preloader">
@@ -69,7 +69,7 @@ JavaScript Functionalities:
 			<nav class="navbar navbar-expand-lg">
 				<div class="container">
 					<!-- Logo Start -->
-					<a class="navbar-brand" href="index.html">
+					<a class="navbar-brand" href="index-slider.html">
 						<img src="images/LBC LOGO.png" alt="Logo">
 					</a>
 					<!-- Logo End -->
@@ -123,7 +123,11 @@ JavaScript Functionalities:
 					<div class="page-header-box">
 						<h1 class="text-anime-style-2" data-cursor="-opaque">Gallery</h1>
 						<nav class="wow fadeInUp">
-						</nav>
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="index-slider.html">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Gallery</li>
+                            </ol>
+                        </nav>
 					</div>
 					<!-- Page Header Box End -->
 				</div>
@@ -132,565 +136,470 @@ JavaScript Functionalities:
 	</div>
 	<!-- Page Header End -->
 
+    <!-- Gallery Intro Start -->
+    <section class="gallery-intro">
+        <div class="container">
+            <div class="gallery-hero">
+                <div class="gallery-hero-content">
+                    <span class="gallery-eyebrow wow fadeInUp">Gallery</span>
+                    <h2 class="wow fadeInUp">A Beautiful Story in Every Frame</h2>
+                    <p class="wow fadeInUp" data-wow-delay="0.2s">
+                        Discover worship, fellowship, and outreach through carefully captured moments.
+                        Each image reflects the heart of our church family.
+                    </p>
+                    <div class="gallery-hero-stats wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="stat-item">
+                            <h3>150+</h3>
+                            <p>Moments captured</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>20+</h3>
+                            <p>Community programs</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>Weekly</h3>
+                            <p>New memories</p>
+                        </div>
+                    </div>
+                    <div class="gallery-actions wow fadeInUp" data-wow-delay="0.4s">
+                        <a href="service.html" class="btn-default">Plan a Visit</a>
+                        <a href="contact.html" class="btn-default btn-highlighted">Join Our Community</a>
+                    </div>
+                </div>
+                <div class="gallery-hero-media wow fadeInRight">
+                    <div class="media-main">
+                        <img src="images/gallery-6.jpg" alt="">
+                        <div class="media-badge">
+                            <i class="fa-solid fa-star"></i>
+                            <span>Trusted by families</span>
+                        </div>
+                    </div>
+                    <div class="media-stack">
+                        <img src="images/gallery-4.jpg" alt="">
+                        <img src="images/gallery-2.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Gallery Intro End -->
+
+    <!-- Featured Moments Start -->
+    <section class="gallery-featured">
+        <div class="container">
+            <div class="section-title text-center">
+                <h2 class="wow fadeInUp">Featured Moments</h2>
+                <p class="wow fadeInUp" data-wow-delay="0.2s">
+                    Highlights from worship, outreach, and community life that make every week unforgettable.
+                </p>
+            </div>
+            <div class="featured-grid">
+                <article class="featured-card wow fadeInUp">
+                    <figure class="featured-media">
+                        <img src="images/choir.jpg" alt="Choir leading worship">
+                    </figure>
+                    <div class="featured-content">
+                        <span class="featured-badge">Worship</span>
+                        <h3>Choir Worship Night</h3>
+                        <p>Powerful praise that lifted hearts and united the congregation.</p>
+                        <div class="featured-meta">
+                            <span>Music Ministry</span>
+                            <span>•</span>
+                            <span>Sunday Service</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="featured-card wow fadeInUp" data-wow-delay="0.1s">
+                    <figure class="featured-media">
+                        <img src="images/share.jpg" alt="Community outreach">
+                    </figure>
+                    <div class="featured-content">
+                        <span class="featured-badge">Outreach</span>
+                        <h3>Community Outreach</h3>
+                        <p>Serving with compassion, meeting needs, and sharing hope.</p>
+                        <div class="featured-meta">
+                            <span>Community Care</span>
+                            <span>•</span>
+                            <span>Local Impact</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="featured-card wow fadeInUp" data-wow-delay="0.2s">
+                    <figure class="featured-media">
+                        <img src="images/celebration.jpg" alt="Celebration service">
+                    </figure>
+                    <div class="featured-content">
+                        <span class="featured-badge">Celebration</span>
+                        <h3>Faith Celebration</h3>
+                        <p>A joyful gathering celebrating milestones and answered prayers.</p>
+                        <div class="featured-meta">
+                            <span>Special Service</span>
+                            <span>•</span>
+                            <span>Church Family</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    <!-- Featured Moments End -->
+
     <!-- Photo Gallery Section Start -->
-	<div class="page-gallery">
+	<section class="page-gallery gallery-showcase">
 		<div class="container">
-			<!-- gallery section start -->
-			<div class="row gallery-items page-gallery-box">
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-cursor-text="View">
-                        <a href="images/lol1 (2).jpg">
-                            <figure class="image-anime">
-                                <img src="images/lol1 (2).jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.2s" data-cursor-text="View">
-                        <a href="images/lol1 (1).jpg">
-                            <figure class="image-anime">
-                                <img src="images/lol1 (1).jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.4s" data-cursor-text="View">
-                        <a href="images/lol1 (4).jpg">
-                            <figure class="image-anime">
-                                <img src="images/lol1 (4).jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.6s" data-cursor-text="View">
-                        <a href="images/lol1 (5).jpg">
-                            <figure class="image-anime">
-                                <img src="images/lol1 (5).jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.8s" data-cursor-text="View">
-                        <a href="images/lol1 (6).jpg">
-                            <figure class="image-anime">
-                                <img src="images/lol1 (6).jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="1s" data-cursor-text="View">
-                        <a href="images/lem.jpg">
-                            <figure class="image-anime">
-                                <img src="images/lem.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-			</div>
-			<!-- gallery section end -->
+            <div class="gallery-masonry gallery-items">
+                <a class="masonry-card size-lg wow fadeInUp" data-cursor-text="View" href="images/lol1 (2).jpg">
+                    <figure class="masonry-media">
+                        <img src="images/lol1 (2).jpg" alt="Worship celebration">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Worship</span>
+                        <span class="gallery-title">Sunday Celebration</span>
+                        <span class="gallery-meta">Praise • Community</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="0.1s" data-cursor-text="View" href="images/lol1 (1).jpg">
+                    <figure class="masonry-media">
+                        <img src="images/lol1 (1).jpg" alt="Congregation worship">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Faith</span>
+                        <span class="gallery-title">Hearts In Unity</span>
+                        <span class="gallery-meta">Congregation • Hope</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="0.2s" data-cursor-text="View" href="images/lol1 (4).jpg">
+                    <figure class="masonry-media">
+                        <img src="images/lol1 (4).jpg" alt="Choir performance">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Music</span>
+                        <span class="gallery-title">Voices Of Hope</span>
+                        <span class="gallery-meta">Choir • Harmony</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="0.3s" data-cursor-text="View" href="images/lol1 (5).jpg">
+                    <figure class="masonry-media">
+                        <img src="images/lol1 (5).jpg" alt="Prayer moment">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Prayer</span>
+                        <span class="gallery-title">Moments Of Prayer</span>
+                        <span class="gallery-meta">Reflection • Peace</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-lg wow fadeInUp" data-wow-delay="0.4s" data-cursor-text="View" href="images/lol1 (6).jpg">
+                    <figure class="masonry-media">
+                        <img src="images/lol1 (6).jpg" alt="Church fellowship">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Fellowship</span>
+                        <span class="gallery-title">Family Fellowship</span>
+                        <span class="gallery-meta">Community • Love</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="0.5s" data-cursor-text="View" href="images/lem.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/lem.jpg" alt="Outreach team">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Outreach</span>
+                        <span class="gallery-title">Serving Together</span>
+                        <span class="gallery-meta">Service • Impact</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="0.6s" data-cursor-text="View" href="images/Afia.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/Afia.jpg" alt="Women fellowship">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Women</span>
+                        <span class="gallery-title">Women Of Faith</span>
+                        <span class="gallery-meta">Growth • Fellowship</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="0.7s" data-cursor-text="View" href="images/Josh.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/Josh.jpg" alt="Youth ministry">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Youth</span>
+                        <span class="gallery-title">Rising Generation</span>
+                        <span class="gallery-meta">Ministry • Purpose</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="0.8s" data-cursor-text="View" href="images/Paula.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/Paula.jpg" alt="Community event">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Events</span>
+                        <span class="gallery-title">Community Moments</span>
+                        <span class="gallery-meta">Connection • Joy</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="0.9s" data-cursor-text="View" href="images/Media.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/Media.jpg" alt="Media team">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Media</span>
+                        <span class="gallery-title">Media Ministry</span>
+                        <span class="gallery-meta">Creative • Service</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="1s" data-cursor-text="View" href="images/celebration.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/celebration.jpg" alt="Celebration service">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Celebration</span>
+                        <span class="gallery-title">Faith Celebrations</span>
+                        <span class="gallery-meta">Joy • Worship</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="1.1s" data-cursor-text="View" href="images/Blessing.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/Blessing.jpg" alt="Blessing moment">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Blessing</span>
+                        <span class="gallery-title">Blessed Together</span>
+                        <span class="gallery-meta">Gratitude • Prayer</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-lg wow fadeInUp" data-wow-delay="1.2s" data-cursor-text="View" href="images/choir.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/choir.jpg" alt="Choir worship">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Choir</span>
+                        <span class="gallery-title">Choir Harmony</span>
+                        <span class="gallery-meta">Music • Worship</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="1.3s" data-cursor-text="View" href="images/191.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/191.jpg" alt="Church service">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Service</span>
+                        <span class="gallery-title">Grace In Action</span>
+                        <span class="gallery-meta">Faith • Impact</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="1.4s" data-cursor-text="View" href="images/68.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/68.jpg" alt="Community gathering">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Community</span>
+                        <span class="gallery-title">Gathered In Love</span>
+                        <span class="gallery-meta">Joy • Together</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="1.5s" data-cursor-text="View" href="images/211.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/211.jpg" alt="Worship service">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Worship</span>
+                        <span class="gallery-title">Sanctuary Praise</span>
+                        <span class="gallery-meta">Spirit • Joy</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="1.6s" data-cursor-text="View" href="images/192.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/192.jpg" alt="Fellowship moment">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Fellowship</span>
+                        <span class="gallery-title">Warm Fellowship</span>
+                        <span class="gallery-meta">Care • Unity</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-lg wow fadeInUp" data-wow-delay="1.7s" data-cursor-text="View" href="images/Music.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/Music.jpg" alt="Praise team">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Music</span>
+                        <span class="gallery-title">Praise Team</span>
+                        <span class="gallery-meta">Worship • Sound</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="1.8s" data-cursor-text="View" href="images/pappoe.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/pappoe.jpg" alt="Leadership gathering">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Leadership</span>
+                        <span class="gallery-title">Leadership Moments</span>
+                        <span class="gallery-meta">Vision • Guidance</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="1.9s" data-cursor-text="View" href="images/69.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/69.jpg" alt="Church program">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Program</span>
+                        <span class="gallery-title">Program Highlights</span>
+                        <span class="gallery-meta">Events • Worship</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="2s" data-cursor-text="View" href="images/52.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/52.jpg" alt="Fellowship event">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Fellowship</span>
+                        <span class="gallery-title">Faithful Friends</span>
+                        <span class="gallery-meta">Joy • Connection</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="2.1s" data-cursor-text="View" href="images/27.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/27.jpg" alt="Church gathering">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Gathering</span>
+                        <span class="gallery-title">Gathering Of Grace</span>
+                        <span class="gallery-meta">Faith • Community</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-lg wow fadeInUp" data-wow-delay="2.2s" data-cursor-text="View" href="images/dede mom.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/dede mom.jpg" alt="Celebration gathering">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Celebration</span>
+                        <span class="gallery-title">Celebration Day</span>
+                        <span class="gallery-meta">Joy • Fellowship</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="2.3s" data-cursor-text="View" href="images/share.jpg">
+                    <figure class="masonry-media">
+                        <img src="images/share.jpg" alt="Community sharing">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Outreach</span>
+                        <span class="gallery-title">Serving With Love</span>
+                        <span class="gallery-meta">Care • Giving</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="2.4s" data-cursor-text="View" href="images/congregation.JPG">
+                    <figure class="masonry-media">
+                        <img src="images/congregation.JPG" alt="Congregation worship">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Worship</span>
+                        <span class="gallery-title">United In Worship</span>
+                        <span class="gallery-meta">Praise • Together</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="2.5s" data-cursor-text="View" href="images/camera.JPG">
+                    <figure class="masonry-media">
+                        <img src="images/camera.JPG" alt="Media coverage">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Media</span>
+                        <span class="gallery-title">Captured Moments</span>
+                        <span class="gallery-meta">Story • Memory</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="2.6s" data-cursor-text="View" href="images/ga.JPG">
+                    <figure class="masonry-media">
+                        <img src="images/ga.JPG" alt="Community outreach">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Outreach</span>
+                        <span class="gallery-title">Outreach Love</span>
+                        <span class="gallery-meta">Service • Hope</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="2.7s" data-cursor-text="View" href="images/girls.JPG">
+                    <figure class="masonry-media">
+                        <img src="images/girls.JPG" alt="Youth group">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Youth</span>
+                        <span class="gallery-title">Youth Fellowship</span>
+                        <span class="gallery-meta">Growth • Joy</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="2.8s" data-cursor-text="View" href="images/nabila.JPG">
+                    <figure class="masonry-media">
+                        <img src="images/nabila.JPG" alt="Community member">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Community</span>
+                        <span class="gallery-title">Faithful Smiles</span>
+                        <span class="gallery-meta">Care • Warmth</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="2.9s" data-cursor-text="View" href="images/umm.JPG">
+                    <figure class="masonry-media">
+                        <img src="images/umm.JPG" alt="Church family">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Family</span>
+                        <span class="gallery-title">Church Family</span>
+                        <span class="gallery-meta">Love • Together</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-lg wow fadeInUp" data-wow-delay="3s" data-cursor-text="View" href="images/old.JPG">
+                    <figure class="masonry-media">
+                        <img src="images/old.JPG" alt="Senior members">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Heritage</span>
+                        <span class="gallery-title">Legacy Of Faith</span>
+                        <span class="gallery-meta">Wisdom • Grace</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-sm wow fadeInUp" data-wow-delay="3.1s" data-cursor-text="View" href="images/mimi.JPG">
+                    <figure class="masonry-media">
+                        <img src="images/mimi.JPG" alt="Worship smiles">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Joy</span>
+                        <span class="gallery-title">Joyful Hearts</span>
+                        <span class="gallery-meta">Worship • Joy</span>
+                    </span>
+                </a>
+                <a class="masonry-card size-md wow fadeInUp" data-wow-delay="3.2s" data-cursor-text="View" href="images/borga.JPG">
+                    <figure class="masonry-media">
+                        <img src="images/borga.JPG" alt="Community gathering">
+                    </figure>
+                    <span class="masonry-overlay">
+                        <span class="gallery-tag">Community</span>
+                        <span class="gallery-title">Together In Grace</span>
+                        <span class="gallery-meta">Faith • Connection</span>
+                    </span>
+                </a>
+            </div>
 		</div>
-	</div>
-
-    <div class="page-gallery">
-		<div class="container">
-			<!-- gallery section start -->
-			<div class="row gallery-items page-gallery-box">
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-cursor-text="View">
-                        <a href="images/Afia.jpg">
-                            <figure class="image-anime">
-                                <img src="images/Afia.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.2s" data-cursor-text="View">
-                        <a href="images/Josh.jpg">
-                            <figure class="image-anime">
-                                <img src="images/Josh.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.4s" data-cursor-text="View">
-                        <a href="images/Paula.jpg">
-                            <figure class="image-anime">
-                                <img src="images/Paula.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.6s" data-cursor-text="View">
-                        <a href="images/Media.jpg">
-                            <figure class="image-anime">
-                                <img src="images/Media.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.8s" data-cursor-text="View">
-                        <a href="images/celebration.jpg">
-                            <figure class="image-anime">
-                                <img src="images/celebration.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="1s" data-cursor-text="View">
-                        <a href="images/Blessing.jpg">
-                            <figure class="image-anime">
-                                <img src="images/Blessing.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-			</div>
-			<!-- gallery section end -->
-		</div><div class="page-gallery">
-		<div class="container">
-			<!-- gallery section start -->
-			<div class="row gallery-items page-gallery-box">
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-cursor-text="View">
-                        <a href="images/choir.jpg">
-                            <figure class="image-anime">
-                                <img src="images/choir.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.2s" data-cursor-text="View">
-                        <a href="images/191.jpg">
-                            <figure class="image-anime">
-                                <img src="images/191.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.4s" data-cursor-text="View">
-                        <a href="images/68.jpg">
-                            <figure class="image-anime">
-                                <img src="images/68.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.6s" data-cursor-text="View">
-                        <a href="images/211.jpg">
-                            <figure class="image-anime">
-                                <img src="images/211.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.8s" data-cursor-text="View">
-                        <a href="images/192.jpg">
-                            <figure class="image-anime">
-                                <img src="images/192.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="1s" data-cursor-text="View">
-                        <a href="images/Music.jpg">
-                            <figure class="image-anime">
-                                <img src="images/Music.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-			</div>
-			<!-- gallery section end -->
-		</div>
-	</div>
-    
-
-
- <div class="page-gallery">
-		<div class="container">
-			<!-- gallery section start -->
-			<div class="row gallery-items page-gallery-box">
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-cursor-text="View">
-                        <a href="images/khady.jpg">
-                            <figure class="image-anime">
-                                <img src="images/khady.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.2s" data-cursor-text="View">
-                        <a href="images/193.jpg">
-                            <figure class="image-anime">
-                                <img src="images/193.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.4s" data-cursor-text="View">
-                        <a href="images/shiley.jpg">
-                            <figure class="image-anime">
-                                <img src="images/shiley.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.6s" data-cursor-text="View">
-                        <a href="images/311.jpg">
-                            <figure class="image-anime">
-                                <img src="images/311.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.8s" data-cursor-text="View">
-                        <a href="images/225.jpg">
-                            <figure class="image-anime">
-                                <img src="images/225.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="1s" data-cursor-text="View">
-                        <a href="images/Blessing.jpg">
-                            <figure class="image-anime">
-                                <img src="images/Blessing.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-			</div>
-			<!-- gallery section end -->
-		</div><div class="page-gallery">
-		<div class="container">
-			<!-- gallery section start -->
-			<div class="row gallery-items page-gallery-box">
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-cursor-text="View">
-                        <a href="images/pappoe.jpg">
-                            <figure class="image-anime">
-                                <img src="images/pappoe.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.2s" data-cursor-text="View">
-                        <a href="images/69.jpg">
-                            <figure class="image-anime">
-                                <img src="images/69.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.4s" data-cursor-text="View">
-                        <a href="images/52.jpg">
-                            <figure class="image-anime">
-                                <img src="images/52.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.6s" data-cursor-text="View">
-                        <a href="images/27.jpg">
-                            <figure class="image-anime">
-                                <img src="images/27.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.8s" data-cursor-text="View">
-                        <a href="images/dede mom.jpg">
-                            <figure class="image-anime">
-                                <img src="images/dede mom.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="1s" data-cursor-text="View">
-                        <a href="images/share.jpg">
-                            <figure class="image-anime">
-                                <img src="images/share.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-			</div>
-			<!-- gallery section end -->
-		</div>
-	</div>
-
-    <div class="page-gallery">
-		<div class="container">
-			<!-- gallery section start -->
-			<div class="row gallery-items page-gallery-box">
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-cursor-text="View">
-                        <a href="images/khady.jpg">
-                            <figure class="image-anime">
-                                <img src="images/khady.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.2s" data-cursor-text="View">
-                        <a href="images/193.jpg">
-                            <figure class="image-anime">
-                                <img src="images/193.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.4s" data-cursor-text="View">
-                        <a href="images/shiley.jpg">
-                            <figure class="image-anime">
-                                <img src="images/shiley.jpg" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.6s" data-cursor-text="View">
-                        <a href="images/congregation.JPG">
-                            <figure class="image-anime">
-                                <img src="images/congregation.JPG" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.8s" data-cursor-text="View">
-                        <a href="images/camera.JPG">
-                            <figure class="image-anime">
-                                <img src="images/camera.JPG" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="1s" data-cursor-text="View">
-                        <a href="images/ga.JPG">
-                            <figure class="image-anime">
-                                <img src="images/ga.JPG" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-			</div>
-			<!-- gallery section end -->
-		</div><div class="page-gallery">
-		<div class="container">
-			<!-- gallery section start -->
-			<div class="row gallery-items page-gallery-box">
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-cursor-text="View">
-                        <a href="images/girls.JPG">
-                            <figure class="image-anime">
-                                <img src="images/girls.JPG" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.2s" data-cursor-text="View">
-                        <a href="images/nabila.JPG">
-                            <figure class="image-anime">
-                                <img src="images/nabila.JPG" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.4s" data-cursor-text="View">
-                        <a href="images/umm.JPG">
-                            <figure class="image-anime">
-                                <img src="images/umm.JPG" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.6s" data-cursor-text="View">
-                        <a href="images/old.JPG">
-                            <figure class="image-anime">
-                                <img src="images/old.JPG" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="0.8s" data-cursor-text="View">
-                        <a href="images/mimi.JPG">
-                            <figure class="image-anime">
-                                <img src="images/mimi.JPG" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-
-                <div class="col-lg-4 col-6">
-                    <!-- image gallery start -->
-                    <div class="photo-gallery wow fadeInUp" data-wow-delay="1s" data-cursor-text="View">
-                        <a href="images/borga.JPG">
-                            <figure class="image-anime">
-                                <img src="images/borga.JPG" alt="">
-                            </figure>
-                        </a>
-                    </div>
-                    <!-- image gallery end -->
-                </div>
-			</div>
-			<!-- gallery section end -->
-		</div>
-	</div>
-    
-
-    
-
-
+	</section>
 	<!-- Photo Gallery Section End -->
+
+    <!-- Gallery CTA Start -->
+    <section class="gallery-cta">
+        <div class="container">
+            <div class="gallery-cta-content wow fadeInUp">
+                <h2>Be Part of the Story</h2>
+                <p>
+                    Every photo represents a moment of faith, love, and connection. Come worship with us,
+                    join a ministry team, or attend an event to create the next memory together.
+                </p>
+                <div class="gallery-cta-actions">
+                    <a href="service.html" class="btn-default">View Service Times</a>
+                    <a href="contact.html" class="btn-default btn-highlighted">Get Involved</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Gallery CTA End -->
 
     <!-- Footer Start -->
     <footer class="main-footer">
@@ -730,7 +639,7 @@ JavaScript Functionalities:
                         <h3>quick links</h3>
                         <ul>
                             <li><a href="index-slider.html">home</a></li>
-                            <li><a href="about.html">our chruch</a></li>
+                            <li><a href="about.html">our church</a></li>
                             <li><a href="service.html">services</a></li>
                             <li><a href="#">event</a></li>
                             <li><a href="#">news</a></li>
