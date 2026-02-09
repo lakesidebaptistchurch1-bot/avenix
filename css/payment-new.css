@@ -546,7 +546,7 @@
 }
 
 .btn-paystack-new:hover {
-	transform: translateY(-2px);
+	transform: translateY(0);
 	box-shadow: 0 12px 35px rgba(0, 212, 255, 0.5);
 }
 
@@ -585,7 +585,7 @@
 }
 
 .btn-submit-donation:hover {
-	transform: translateY(-3px);
+	transform: translateY(0);
 	box-shadow: 0 15px 50px rgba(255, 0, 110, 0.5);
 }
 
@@ -1285,7 +1285,7 @@
 }
 
 .btn-paystack-new:hover {
-	transform: translateY(-2px);
+	transform: translateY(0);
 	box-shadow: 0 12px 35px rgba(0, 212, 255, 0.5);
 }
 
@@ -1324,7 +1324,7 @@
 }
 
 .btn-submit-donation:hover {
-	transform: translateY(-3px);
+	transform: translateY(0);
 	box-shadow: 0 15px 50px rgba(255, 0, 110, 0.6);
 }
 
