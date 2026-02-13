@@ -107,12 +107,12 @@ JavaScript Functionalities:
                                     </ul>
                                 </li>
                                 <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
-                                <li class="nav-item highlighted-menu"><a class="nav-link" href="#">donate now</a></li>
+                                <li class="nav-item highlighted-menu"><a class="nav-link" href="donation.html#donate-section">donate now</a></li>
                             </ul>
                         </div>
                         <!-- Let’s Start Button Start -->
                         <div class="header-btn d-inline-flex">
-                            <a href="#" class="btn-default">donate now</a>
+                            <a href="donation.html#donate-section" class="btn-default">donate now</a>
                         </div>
                         <!-- Let’s Start Button End -->
                     </div>
@@ -198,7 +198,7 @@ JavaScript Functionalities:
                                 <div class="payment-methods-carousel">
                                     <!-- Mobile Money -->
                                     <div class="payment-method-item">
-                                        <input type="radio" id="mobile_money" name="payment_method" value="mobile_money">
+                                        <input type="radio" id="mobile_money" name="payment_method" value="mobile_money" checked>
                                         <label for="mobile_money" class="method-card">
                                             <div class="card-glow"></div>
                                             <div class="card-content">
@@ -206,43 +206,7 @@ JavaScript Functionalities:
                                                     <i class="fas fa-mobile-alt"></i>
                                                 </div>
                                                 <h4>Mobile Money</h4>
-                                                <p>MTN • Vodafone • AirtelTigo</p>
-                                                <div class="card-arrow">
-                                                    <i class="fas fa-arrow-right"></i>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-
-                                    <!-- Bank Transfer -->
-                                    <div class="payment-method-item">
-                                        <input type="radio" id="bank" name="payment_method" value="bank" checked>
-                                        <label for="bank" class="method-card">
-                                            <div class="card-glow"></div>
-                                            <div class="card-content">
-                                                <div class="method-icon-large">
-                                                    <i class="fas fa-university"></i>
-                                                </div>
-                                                <h4>Bank Transfer</h4>
-                                                <p>Direct deposit to account</p>
-                                                <div class="card-arrow">
-                                                    <i class="fas fa-arrow-right"></i>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-
-                                    <!-- Credit Card -->
-                                    <div class="payment-method-item">
-                                        <input type="radio" id="credit_card" name="payment_method" value="credit_card">
-                                        <label for="credit_card" class="method-card">
-                                            <div class="card-glow"></div>
-                                            <div class="card-content">
-                                                <div class="method-icon-large">
-                                                    <i class="fas fa-credit-card"></i>
-                                                </div>
-                                                <h4>Credit Card</h4>
-                                                <p>Visa • Mastercard</p>
+                                                <p>MTN • Telecel • AirtelTigo</p>
                                                 <div class="card-arrow">
                                                     <i class="fas fa-arrow-right"></i>
                                                 </div>
@@ -267,65 +231,40 @@ JavaScript Functionalities:
                                             </div>
                                         </label>
                                     </div>
+
+                                    <!-- Card -->
+                                    <div class="payment-method-item">
+                                        <input type="radio" id="card" name="payment_method" value="card">
+                                        <label for="card" class="method-card">
+                                            <div class="card-glow"></div>
+                                            <div class="card-content">
+                                                <div class="method-icon-large">
+                                                    <i class="fas fa-credit-card"></i>
+                                                </div>
+                                                <h4>Mastercard / Visa / Virtual Card</h4>
+                                                <p>3-D Secure verification</p>
+                                                <div class="card-arrow">
+                                                    <i class="fas fa-arrow-right"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
                                 </div>
 
                                 <!-- Payment Details Section -->
                                 <div class="payment-details-section">
-                                    <!-- Bank Transfer Details -->
-                                    <div id="bank-details" class="payment-details-form active">
-                                        <div class="form-header">
-                                            <i class="fas fa-university"></i>
-                                            <h3>Bank Transfer Details</h3>
-                                        </div>
-                                        <div class="bank-details-grid">
-                                            <div class="detail-item">
-                                                <label>Bank Name</label>
-                                                <div class="detail-value">Zenith Bank Ghana / Ecobank Ghana</div>
-                                            </div>
-                                            <div class="detail-item">
-                                                <label>Account Name</label>
-                                                <div class="detail-value">Lakeside Baptist Church</div>
-                                            </div>
-                                            <div class="detail-item">
-                                                <label>Account Number</label>
-                                                <div class="detail-value">[Your Account Number]</div>
-                                            </div>
-                                            <div class="detail-item">
-                                                <label>Branch</label>
-                                                <div class="detail-value">Accra Main Branch</div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="bank_name">Your Full Name</label>
-                                            <input type="text" id="bank_name" name="bank_name" class="form-control-new" placeholder="Your full name" value="<?php echo htmlspecialchars($name); ?>" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="bank_email">Email Address</label>
-                                            <input type="email" id="bank_email" name="bank_email" class="form-control-new" placeholder="your@email.com" value="<?php echo htmlspecialchars($email); ?>" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="bank_phone">Phone Number</label>
-                                            <input type="tel" id="bank_phone" name="bank_phone" class="form-control-new" placeholder="0XX XXX XXXX" pattern="[0-9]{10}" maxlength="10" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="bank_amount">Amount to Transfer (GH₵)</label>
-                                            <input type="number" id="bank_amount" name="bank_amount" class="form-control-new" placeholder="0.00" step="0.01" min="0.01" required>
-                                        </div>
-                                        <p class="form-note">After transferring, send proof to <a href="mailto:info@lbcghana.org">info@lbcghana.org</a> with your name and transaction reference</p>
-                                    </div>
-
                                     <!-- Mobile Money Details -->
-                                    <div id="mobile-money-details" class="payment-details-form">
+                                    <div id="mobile-money-details" class="payment-details-form active">
                                         <div class="form-header">
                                             <i class="fas fa-mobile-alt"></i>
                                             <h3>Mobile Money Details</h3>
                                         </div>
                                         <div class="form-group">
                                             <label for="mm_network">Select Network</label>
-                                            <select id="mm_network" name="mm_network" class="form-control-new" required>
+                                        <select id="mm_network" name="mm_network" class="form-control-new" required>
                                                 <option value="">Choose network...</option>
                                                 <option value="mtn">MTN Mobile Money</option>
-                                                <option value="vodafone">Vodafone Cash</option>
+                                            <option value="telecel">Telecel Cash</option>
                                                 <option value="airteltigo">AirtelTigo Money</option>
                                             </select>
                                         </div>
@@ -344,11 +283,11 @@ JavaScript Functionalities:
                                         </div>
                                     </div>
 
-                                    <!-- Credit Card Details -->
-                                    <div id="credit-card-details" class="payment-details-form">
+                                    <!-- Card Details -->
+                                    <div id="card-details" class="payment-details-form">
                                         <div class="form-header">
                                             <i class="fas fa-credit-card"></i>
-                                            <h3>Credit Card Details</h3>
+                                            <h3>Card Details</h3>
                                         </div>
                                         <div class="form-group">
                                             <label for="card_number">Card Number (16 digits)</label>
@@ -576,7 +515,7 @@ JavaScript Functionalities:
             $('#payment-amount').val(amount);
 
             // Auto-fill amount fields
-            $('#mm_amount, #bank_amount, #paystack_amount').val(amount.toFixed(2));
+            $('#mm_amount, #paystack_amount').val(amount.toFixed(2));
 
             // Payment method details toggle (method values use underscore, IDs use hyphen)
             $('input[name="payment_method"]').change(function() {
@@ -587,7 +526,7 @@ JavaScript Functionalities:
             });
 
             // Format phone number input (Ghana format: 0XXXXXXXXX)
-            $('#mm_phone, #bank_phone, #paystack_phone').on('input', function() {
+            $('#mm_phone, #paystack_phone').on('input', function() {
                 let value = $(this).val().replace(/\D/g, '');
                 if (value.length > 10) value = value.slice(0, 10);
                 $(this).val(value);
@@ -636,18 +575,7 @@ JavaScript Functionalities:
                         errorMsg = 'Please enter your full name';
                         isValid = false;
                     }
-                } else if (method === 'bank') {
-                    if (!$('#bank_name').val()) {
-                        errorMsg = 'Please enter your full name';
-                        isValid = false;
-                    } else if (!$('#bank_email').val()) {
-                        errorMsg = 'Please enter your email address';
-                        isValid = false;
-                    } else if ($('#bank_phone').val().length !== 10) {
-                        errorMsg = 'Phone number must be 10 digits';
-                        isValid = false;
-                    }
-                } else if (method === 'credit_card') {
+                } else if (method === 'card') {
                     var cardNum = $('#card_number').val().replace(/\s/g, '');
                     var expiry = $('#expiry').val();
                     var cvv = $('#cvv').val();

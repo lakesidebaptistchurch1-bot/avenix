@@ -96,12 +96,12 @@ JavaScript Functionalities:
                                     </ul>
                                 </li>
                                 <li class="nav-item"><a class="nav-link" href="contact.html">Contact Us</a></li>
-                                <li class="nav-item highlighted-menu"><a class="nav-link" href="#">donate now</a></li>                               
+                                <li class="nav-item highlighted-menu"><a class="nav-link" href="donation.html#donate-section">donate now</a></li>                               
                             </ul>
                         </div>
                         <!-- Let’s Start Button Start -->
                         <div class="header-btn d-inline-flex">
-                            <a href="#" class="btn-default">donate now</a>
+                            <a href="donation.html#donate-section" class="btn-default">donate now</a>
                         </div>
                         <!-- Let’s Start Button End -->
 					</div>
@@ -137,8 +137,30 @@ JavaScript Functionalities:
 	<!-- Page Header End -->
 
     <!-- Page Campaign Single Start -->
-    <div class="page-campaign-single">
+    <div class="page-campaign-single donation-catchy">
         <div class="container">
+            <div class="donation-highlight">
+                <div class="donation-highlight-content">
+                    <span class="donation-chip">Give Today</span>
+                    <h2>Fuel the Mission, Transform Lives</h2>
+                    <p>Your generosity powers ministry programs, outreach, and care. Every gift helps us serve with excellence.</p>
+                </div>
+                <div class="donation-highlight-stats">
+                    <div>
+                        <h3>24/7</h3>
+                        <p>Secure Giving</p>
+                    </div>
+                    <div>
+                        <h3>100%</h3>
+                        <p>Impact Focused</p>
+                    </div>
+                    <div>
+                        <h3>Trusted</h3>
+                        <p>Certified Providers</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-lg-8">
                     <div class="campaign-single-content">
@@ -371,7 +393,7 @@ JavaScript Functionalities:
                 </div>
 
                 <div class="col-lg-4">
-                    <div class="campaign-single-sidebar">
+                    <div class="campaign-single-sidebar donation-form-card" id="donate-section">
                         <div class="campaign-sidebar-title">
                             <h3 class="wow fadeInUp"><span>give</span> today</h3>
                             <p class="wow fadeInUp" data-wow-delay="0.25s">Every time you give to find Faith Church, you're helping fulfill the mission.</p>
@@ -418,22 +440,6 @@ JavaScript Functionalities:
                                     </fieldset>
                                 </div>
 
-                                <div class="donate-payment-method">
-                                    <div class="payment-method-title">
-                                        <h3>select payment method</h3>
-                                    </div>
-                                    <div class="donate-payment-type">
-                                        <div class="payment-method">
-                                            <input type="radio" id="test" name="payment" value="Test" checked>
-                                            <label for="test">test donation</label>
-                                        </div>                                      
-                                        <div class="payment-method">
-                                            <input type="radio" id="Offline" name="payment" value="Offline">
-                                            <label for="Offline">offline donation</label>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="donar-personal-info">
                                     <div class="row">
                                         <div class="form-group col-6 mb-3">
@@ -461,7 +467,7 @@ JavaScript Functionalities:
                                 </div>
 
                                 <div class="form-group-btn">
-                                    <button type="submit" class="btn-default">donate now</button>
+                                    <button type="submit" class="btn-default">continue to payment</button>
                                     <div id="msgSubmit" class="h3 hidden"></div>
                                 </div>
                             </form>
@@ -655,7 +661,9 @@ JavaScript Functionalities:
             }
 
             // Set amount on radio button change
-            $('input[name="value"]').change(setAmount);
+            $('input[name="value"]').change(function() {
+                setAmount();
+            });
 
             // Set amount on custom amount input change
             $('#custom_amount').on('input', setAmount);
