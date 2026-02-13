@@ -1,3 +1,122 @@
+
+/* Donation catchy layout */
+.donation-catchy{
+	background: radial-gradient(circle at top, rgba(14, 165, 233, 0.12), transparent 55%), #f8fafc;
+	padding: 90px 0 110px;
+}
+
+.donation-catchy .donation-highlight{
+	background: linear-gradient(120deg, #0f172a, #0ea5e9);
+	color: #ffffff;
+	border-radius: 28px;
+	padding: 30px 34px;
+	display: grid;
+	grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+	gap: 24px;
+	margin-bottom: 36px;
+	box-shadow: 0 26px 50px rgba(15, 23, 42, 0.25);
+}
+
+.donation-catchy .donation-chip{
+	display: inline-flex;
+	background: rgba(255, 255, 255, 0.16);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	border-radius: 999px;
+	padding: 6px 14px;
+	font-size: 12px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	margin-bottom: 12px;
+}
+
+.donation-catchy .donation-highlight h2{
+	color: #ffffff;
+	margin-bottom: 10px;
+}
+
+.donation-catchy .donation-highlight-stats{
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 12px;
+}
+
+.donation-catchy .donation-highlight-stats div{
+	background: rgba(255, 255, 255, 0.15);
+	border-radius: 18px;
+	padding: 14px 16px;
+	text-align: center;
+}
+
+.donation-catchy .donation-highlight-stats h3{
+	color: #ffffff;
+	margin-bottom: 6px;
+	font-size: 20px;
+}
+
+.donation-catchy .campaign-single-content{
+	background: #ffffff;
+	border-radius: 26px;
+	padding: 26px;
+	box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.donation-catchy .campaign-featured-image{
+	margin-bottom: 24px;
+}
+
+.donation-catchy .campaign-donate-box{
+	background: #f8fafc;
+	border-radius: 20px;
+	padding: 18px 20px;
+}
+
+.donation-catchy .campaign-donate-item h3{
+	color: #0f172a;
+}
+
+.donation-catchy .donation-form-card{
+	background: #ffffff;
+	border-radius: 26px;
+	padding: 24px;
+	box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+}
+
+.donation-catchy .campaign-sidebar-title h3 span{
+	color: #0ea5e9;
+}
+
+.donation-catchy .campaign-donate-form .form-control{
+	border-radius: 14px;
+}
+
+.donation-catchy .donate-value-box label{
+	border-radius: 14px;
+}
+
+.donation-catchy .form-group-btn{
+	display: grid;
+	gap: 12px;
+}
+
+@media (max-width: 991px){
+	.donation-catchy{
+		padding: 70px 0 90px;
+	}
+
+	.donation-catchy .donation-highlight{
+		grid-template-columns: 1fr;
+	}
+
+	.donation-catchy .campaign-single-content{
+		margin-bottom: 24px;
+	}
+}
+
+@media (max-width: 767px){
+	.donation-catchy .donation-highlight-stats{
+		grid-template-columns: 1fr;
+	}
+}
  /* ----------------------------------------------------------------------------------------
 * Author        : Awaiken
 * Template Name : Avenix - Church HTML Template
@@ -8814,5 +8933,135 @@ header.main-header .header-sticky.active{
 @media (max-width: 767px){
 	.sermons-single-catchy .banner-stats{
 		grid-template-columns: 1fr;
+	}
+}
+
+/* Donation payment upgrade */
+.payment-method-pro{
+	margin-top: 26px;
+}
+
+.payment-method-pro .payment-method-title{
+	margin-bottom: 16px;
+}
+
+.payment-method-pro .payment-method-title p{
+	color: #64748b;
+	margin-top: 6px;
+}
+
+.payment-method-pro .payment-method-grid{
+	display: grid;
+	gap: 14px;
+}
+
+.payment-method-pro .payment-card{
+	display: block;
+	border: 1px solid #e2e8f0;
+	border-radius: 18px;
+	padding: 16px 18px;
+	background: #ffffff;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+	cursor: pointer;
+}
+
+.payment-method-pro .payment-card input{
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+.payment-method-pro .payment-card-body{
+	display: grid;
+	gap: 6px;
+}
+
+.payment-method-pro .payment-card-title{
+	font-weight: 600;
+	color: #0f172a;
+}
+
+.payment-method-pro .payment-card-text{
+	color: #64748b;
+	font-size: 14px;
+}
+
+.payment-method-pro .payment-card-meta{
+	color: #0ea5e9;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+}
+
+.payment-method-pro .payment-card.is-selected{
+	border-color: #0ea5e9;
+	box-shadow: 0 18px 40px rgba(14, 165, 233, 0.15);
+	transform: translateY(-2px);
+}
+
+.payment-method-pro .payment-note{
+	margin-top: 14px;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 14px;
+	border-radius: 999px;
+	background: rgba(14, 165, 233, 0.1);
+	color: #0f172a;
+	font-size: 13px;
+}
+
+.payment-method-pro .payment-note i{
+	color: #0ea5e9;
+}
+
+.payment-method-pro .payment-details{
+	margin-top: 18px;
+	display: grid;
+	gap: 14px;
+}
+
+.payment-method-pro .payment-panel{
+	display: none;
+	background: #f8fafc;
+	border-radius: 18px;
+	padding: 18px;
+	border: 1px solid #e2e8f0;
+}
+
+.payment-method-pro .payment-panel.is-active{
+	display: block;
+}
+
+.payment-method-pro .payment-panel h4{
+	margin-bottom: 12px;
+}
+
+.payment-method-pro .payment-panel label{
+	font-size: 13px;
+	color: #64748b;
+	margin-bottom: 6px;
+}
+
+.btn-outline{
+	background: transparent;
+	color: #0ea5e9;
+	border: 1px solid #0ea5e9;
+}
+
+.btn-outline:hover{
+	background: #0ea5e9;
+	color: #ffffff;
+}
+
+@media (max-width: 767px){
+	.payment-method-pro .payment-card{
+		padding: 14px 16px;
+	}
+
+	.payment-method-pro .payment-note{
+		border-radius: 16px;
+		flex-wrap: wrap;
 	}
 }
