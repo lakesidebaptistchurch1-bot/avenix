@@ -26,7 +26,7 @@ if ($amount <= 0) {
 }
 
 // Validate payment method
-$valid_methods = ['bank', 'mobile_money', 'credit_card', 'paystack'];
+$valid_methods = ['mobile_money', 'card', 'paystack'];
 if (!in_array($payment_method, $valid_methods)) {
     echo json_encode(['error' => 'Invalid payment method']);
     exit;
@@ -34,14 +34,6 @@ if (!in_array($payment_method, $valid_methods)) {
 
 // Process based on payment method
 switch ($payment_method) {
-    case 'bank':
-        // Bank transfer processing
-        $name = isset($_POST['bank_name']) ? $_POST['bank_name'] : '';
-        $email = isset($_POST['bank_email']) ? $_POST['bank_email'] : '';
-        $phone = isset($_POST['bank_phone']) ? $_POST['bank_phone'] : '';
-        $response = processBankTransfer($amount, $name, $email, $phone);
-        break;
-
     case 'mobile_money':
         // Mobile money processing (MTN, Vodafone, AirtelTigo)
         $network = isset($_POST['mm_network']) ? $_POST['mm_network'] : '';
@@ -50,8 +42,8 @@ switch ($payment_method) {
         $response = processMobileMoney($amount, $network, $phone, $name);
         break;
 
-    case 'credit_card':
-        // Credit card processing
+    case 'card':
+        // Card processing
         $card_data = [
             'number' => $_POST['card_number'] ?? '',
             'expiry' => $_POST['expiry'] ?? '',
@@ -60,22 +52,6 @@ switch ($payment_method) {
             'email' => $_POST['card_email'] ?? ''
         ];
         $response = processCreditCard($amount, $card_data);
-        break;
-
-    case 'mastercard':
-        // Mastercard processing (similar to credit card)
-        $card_data = [
-            'number' => $_POST['mastercard_number'] ?? '',
-            'expiry' => $_POST['mastercard_expiry'] ?? '',
-            'cvv' => $_POST['mastercard_cvv'] ?? '',
-            'name' => $_POST['mastercard_name'] ?? ''
-        ];
-        $response = processMastercard($amount, $card_data);
-        break;
-
-    case 'crypto':
-        // Cryptocurrency processing
-        $response = processCrypto($amount);
         break;
 
     case 'paystack':
