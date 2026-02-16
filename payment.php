@@ -508,9 +508,8 @@ JavaScript Functionalities:
     <!-- Payment form handler -->
     <script>
         $(document).ready(function() {
-            // Get amount from URL parameters
-            var urlParams = new URLSearchParams(window.location.search);
-            var amount = parseFloat(urlParams.get('amount')) || 100;
+            // Use server-provided amount (fallback to 100 if missing)
+            var amount = parseFloat($('#payment-amount').val()) || 100;
             $('#display-amount').text('GH ' + amount.toFixed(2));
             $('#payment-amount').val(amount);
 
