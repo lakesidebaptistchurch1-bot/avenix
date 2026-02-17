@@ -15,6 +15,7 @@ $fname = isset($_POST['fname']) ? trim($_POST['fname']) : '';
 $lname = isset($_POST['lname']) ? trim($_POST['lname']) : '';
 $name = trim($fname . ' ' . $lname);
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+$note = isset($_POST['donation_note']) ? trim($_POST['donation_note']) : '';
 
 // Basic validation
 if ($amount <= 0) {
@@ -39,7 +40,8 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 $_SESSION['donation'] = [
     'amount' => $amount,
     'name' => $name,
-    'email' => $email
+    'email' => $email,
+    'note' => $note
 ];
 
 // Redirect to payment page
