@@ -35,7 +35,7 @@ if (!in_array($payment_method, $valid_methods)) {
 // Process based on payment method
 switch ($payment_method) {
     case 'mobile_money':
-        // Mobile money processing (MTN, Vodafone, AirtelTigo)
+        // Mobile money processing (MTN, Telecel, AirtelTigo)
         $network = isset($_POST['mm_network']) ? $_POST['mm_network'] : '';
         $phone = isset($_POST['mm_phone']) ? $_POST['mm_phone'] : '';
         $name = isset($_POST['mm_name']) ? $_POST['mm_name'] : '';
@@ -43,7 +43,7 @@ switch ($payment_method) {
         break;
 
     case 'card':
-        // Card processing
+        // Card processing (Visa/Mastercard/Virtual)
         $card_data = [
             'number' => $_POST['card_number'] ?? '',
             'expiry' => $_POST['expiry'] ?? '',
@@ -74,32 +74,6 @@ echo json_encode($response);
 // Function definitions
 
 /**
- * Process bank transfer
- * @param float $amount
- * @param string $name
- * @param string $email
- * @param string $phone
- * @return array
- */
-function processBankTransfer($amount, $name, $email, $phone) {
-    // Placeholder: In real implementation, send email with bank details or log transaction
-    // API Placeholder: Integrate with banking API if available
-
-    // Simulate processing
-    $transaction_id = 'BANK_' . time() . '_' . rand(1000, 9999);
-
-    // Log transaction (placeholder)
-    // logTransaction($transaction_id, $amount, 'bank');
-
-    return [
-        'success' => true,
-        'message' => 'Bank transfer request submitted. Please transfer GH ' . number_format($amount, 2) . ' to the provided account.',
-        'transaction_id' => $transaction_id,
-        'instructions' => 'Transfer details have been sent to your email.'
-    ];
-}
-
-/**
  * Process mobile money payment
  * @param float $amount
  * @param string $network
@@ -113,7 +87,7 @@ function processMobileMoney($amount, $network, $phone, $name) {
         return ['error' => 'Network, phone number, and name are required'];
     }
 
-    // Placeholder: Integrate with mobile money API (e.g., MTN MoMo API)
+    // Placeholder: Integrate with mobile money API (e.g., MTN MoMo API or aggregator)
     // API Placeholder: Call mobile money provider API
 
     // Simulate API call
@@ -166,39 +140,6 @@ function processCreditCard($amount, $card_data) {
 }
 
 /**
- * Process Mastercard payment
- * @param float $amount
- * @param array $card_data
- * @return array
- */
-function processMastercard($amount, $card_data) {
-    // Similar to credit card, but specifically for Mastercard
-    return processCreditCard($amount, $card_data); // Reuse logic
-}
-
-/**
- * Process cryptocurrency payment
- * @param float $amount
- * @return array
- */
-function processCrypto($amount) {
-    // Placeholder: Integrate with crypto payment service (e.g., Coinbase Commerce, BitPay)
-    // API Placeholder: Call crypto payment API
-
-    // Simulate processing
-    $transaction_id = 'CRYPTO_' . time() . '_' . rand(1000, 9999);
-
-    // logTransaction($transaction_id, $amount, 'crypto');
-
-    return [
-        'success' => true,
-        'message' => 'Cryptocurrency payment request created. Please send ' . number_format($amount, 2) . ' to the provided wallet address.',
-        'transaction_id' => $transaction_id,
-        'wallet_address' => '1A2B3C4D5E6F7G8H9I0J' // Placeholder
-    ];
-}
-
-/**
  * Process Paystack payment verification
  * @param float $amount
  * @param string $reference
@@ -244,19 +185,6 @@ function simulateMobileMoneyAPI($amount, $network, $phone, $name) {
 function simulatePaymentGatewayAPI($amount, $card_data, $type) {
     // Placeholder: Replace with actual API call
     return ['success' => true, 'message' => 'Payment processed'];
-}
-
-/**
- * Simulate Paystack API call
- */
-function simulatePaystackAPI($amount) {
-    // Placeholder: Replace with actual Paystack API integration
-    $transaction_id = 'PAYSTACK_' . time() . '_' . rand(1000, 9999);
-    return [
-        'success' => true,
-        'url' => 'https://paystack.com/pay/' . $transaction_id, // Placeholder URL
-        'transaction_id' => $transaction_id
-    ];
 }
 
 /**
