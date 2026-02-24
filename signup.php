@@ -49,12 +49,12 @@ unset($_SESSION['auth_error'], $_SESSION['auth_info']);
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" class="form-control" minlength="8" required>
-                        <small class="form-hint">Minimum 8 characters</small>
+                        <input type="password" id="password" name="password" class="form-control" minlength="8" maxlength="12" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,12}" required>
+                        <small class="form-hint">8-12 chars, 1 uppercase, 1 lowercase, 1 number, 1 special</small>
                     </div>
                     <div class="form-group">
                         <label for="confirm_password">Confirm Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="8" required>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="8" maxlength="12" required>
                     </div>
                     <button type="submit" class="btn-default btn-block">Create account</button>
                 </form>

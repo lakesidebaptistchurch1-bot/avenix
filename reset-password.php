@@ -34,11 +34,11 @@ unset($_SESSION['auth_error']);
                     <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
                     <div class="form-group">
                         <label for="password">New Password</label>
-                        <input type="password" id="password" name="password" class="form-control" minlength="8" required>
+                        <input type="password" id="password" name="password" class="form-control" minlength="8" maxlength="12" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,12}" required>
                     </div>
                     <div class="form-group">
                         <label for="confirm_password">Confirm Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="8" required>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="8" maxlength="12" required>
                     </div>
                     <button type="submit" class="btn-default btn-block">Update password</button>
                 </form>

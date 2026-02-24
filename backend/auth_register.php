@@ -23,8 +23,14 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-if (strlen($password) < 8) {
-    $_SESSION['auth_error'] = 'Password must be at least 8 characters.';
+if (strlen($password) < 8 || strlen($password) > 12) {
+    $_SESSION['auth_error'] = 'Password must be 8-12 characters.';
+    header('Location: ../signup.php');
+    exit;
+}
+
+if (!preg_match('/[A-Z]/', $password) || !preg_match('/[a-z]/', $password) || !preg_match('/\d/', $password) || !preg_match('/[^A-Za-z0-9]/', $password)) {
+    $_SESSION['auth_error'] = 'Password must include uppercase, lowercase, number, and special character.';
     header('Location: ../signup.php');
     exit;
 }
