@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/backend/auth.php';
+require_login('login.php');
 $donation = $_SESSION['donation'] ?? null;
 if (!$donation) {
     header('Location: donation.html');
@@ -112,6 +113,7 @@ JavaScript Functionalities:
                         </div>
                         <!-- Let’s Start Button Start -->
                         <div class="header-btn d-inline-flex">
+                            <a href="signup.php" class="btn-default btn-signup">sign up</a>
                             <a href="donation.html#donate-section" class="btn-default">donate now</a>
                         </div>
                         <!-- Let’s Start Button End -->
@@ -522,7 +524,14 @@ JavaScript Functionalities:
                 var method = $(this).val();
                 var detailsId = method.replace(/_/g, '-') + '-details';
                 $('#' + detailsId).addClass('active');
+                // Disable fields in hidden panels to avoid HTML5 required blocking
+                $('.payment-details-form').find('input, select, textarea').prop('disabled', true);
+                $('#' + detailsId).find('input, select, textarea').prop('disabled', false);
             });
+
+            // Initialize fields for the default active method
+            $('.payment-details-form').find('input, select, textarea').prop('disabled', true);
+            $('.payment-details-form.active').find('input, select, textarea').prop('disabled', false);
 
             // Format phone number input (Ghana format: 0XXXXXXXXX)
             $('#mm_phone, #paystack_phone').on('input', function() {

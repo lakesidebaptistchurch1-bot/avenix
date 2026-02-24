@@ -47,6 +47,33 @@
 	color: #64748b;
 }
 
+.donation-auth-note{
+	margin-top: 12px;
+	font-size: 13px;
+	color: #64748b;
+}
+
+.donation-auth-note a{
+	color: #0ea5e9;
+}
+
+.btn-signup{
+	background: transparent;
+	border: 1px solid #0ea5e9;
+	color: #0ea5e9;
+}
+
+.btn-signup:hover{
+	background: #0ea5e9;
+	color: #ffffff;
+}
+
+/* Header actions alignment */
+.header-btn.d-inline-flex{
+	margin-left: auto;
+	gap: 12px;
+}
+
 @media (max-width: 767px){
 	.donation-form-meta{
 		flex-direction: column;
