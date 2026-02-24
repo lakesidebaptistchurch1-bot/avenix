@@ -44,6 +44,14 @@ $_SESSION['donation'] = [
     'note' => $note
 ];
 
+// Require login before payment
+if (!isset($_SESSION['user'])) {
+    $_SESSION['redirect_after_login'] = '/payment.php';
+    $_SESSION['auth_info'] = 'Please sign in or create an account to continue to payment.';
+    header('Location: ../login.php');
+    exit;
+}
+
 // Redirect to payment page
 header('Location: ../payment.php');
 exit;
