@@ -44,6 +44,17 @@ $_SESSION['donation'] = [
     'note' => $note
 ];
 
+// Store donation draft (optional)
+try {
+    $pdo = db();
+    $stmt = $pdo->prepare('INSERT INTO donations (user_id, name, email, note, amount, status, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())');
+    $user_id = $_SESSION['user']['id'] ?? null;
+    $stmt->execute([$user_id, $name, $email, $note, $amount, 'pending']);
+    $_SESSION['donation_id'] = $pdo->lastInsertId();
+} catch (Exception $e) {
+    // Silently continue if DB insert fails
+}
+
 // Require login before payment
 if (!isset($_SESSION['user'])) {
     $_SESSION['redirect_after_login'] = '/payment.php';

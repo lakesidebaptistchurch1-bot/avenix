@@ -50,7 +50,7 @@ unset($_SESSION['auth_error'], $_SESSION['auth_info']);
                     <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" class="form-control" minlength="8" maxlength="12" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,12}" required>
-                        <small class="form-hint">8-12 chars, 1 uppercase, 1 lowercase, 1 number, 1 special</small>
+                        <small class="form-hint">8-12 chars with upper, lower, number, and special.</small>
                     </div>
                     <div class="form-group">
                         <label for="confirm_password">Confirm Password</label>
@@ -81,6 +81,12 @@ unset($_SESSION['auth_error'], $_SESSION['auth_info']);
         $('#signupForm').on('submit', function () {
             var pass = $('#password').val();
             var confirm = $('#confirm_password').val();
+            var pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,12}$/;
+
+            if (!pattern.test(pass)) {
+                alert('Password must be 8-12 chars with upper, lower, number, and special.');
+                return false;
+            }
             if (pass !== confirm) {
                 alert('Passwords do not match.');
                 return false;

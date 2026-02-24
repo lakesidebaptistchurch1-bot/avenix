@@ -35,15 +35,27 @@ $insert->execute([$user['id'], $token_hash, $expires]);
 
 $reset_link = BASE_URL . '/reset-password.php?token=' . $token;
 
-// TODO: send email using SMTP provider
-// mail($user['email'], 'Reset your password', "Click: $reset_link");
+// Send reset email (use SMTP provider in production)
+$mail_sent = send_reset_email($user['email'], $user['name'], $reset_link);
 
 if (APP_ENV !== 'production') {
     $_SESSION['auth_success'] = 'Reset link generated. Use the link below to continue.';
     $_SESSION['reset_link'] = $reset_link;
 } else {
-    $_SESSION['auth_success'] = 'If that email exists, a reset link has been sent.';
+    $_SESSION['auth_success'] = $mail_sent
+        ? 'If that email exists, a reset link has been sent.'
+        : 'We could not send the email. Please contact support.';
 }
 
 header('Location: ../forgot-password.php');
 exit;
+
+function send_reset_email($to, $name, $link) {
+    $subject = 'Reset your password';
+    $message = "Hello $name,\n\nUse the link below to reset your password:\n$link\n\nIf you did not request this, please ignore this email.";
+    $headers = "From: " . SMTP_FROM_NAME . " <" . SMTP_FROM . ">\r\n";
+
+    // In production, configure PHP to use an SMTP provider (SendGrid, Mailgun, etc.)
+    // This uses PHP's mail() which relies on server mail settings.
+    return @mail($to, $subject, $message, $headers);
+}
