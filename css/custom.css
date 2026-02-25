@@ -9147,3 +9147,27 @@ header.main-header .header-sticky.active{
 		flex-wrap: wrap;
 	}
 }
+
+/* ---- Auth nav pill (injected by auth-nav.js) ---- */
+.nav-user-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(28,74,140,0.1);
+    color: #1c4a8c;
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 700;
+    border: 1px solid rgba(28,74,140,0.18);
+}
+.nav-user-pill i { font-size: 16px; }
+.btn-signout {
+    font-size: 13px !important;
+    padding: 9px 18px !important;
+    background: transparent !important;
+    color: #0b1f3a !important;
+    border: 1.5px solid #e2e8f0 !important;
+}
+.btn-signout:hover { background: #f1f5f9 !important; }
+

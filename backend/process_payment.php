@@ -5,6 +5,8 @@
 // Start session to store temporary data if needed
 session_start();
 
+require_once __DIR__ . '/config.php';
+
 // Include necessary files (e.g., database connection, config)
 // require_once 'config.php'; // Placeholder for config file
 
@@ -149,24 +151,75 @@ function processCreditCard($amount, $card_data) {
  * @return array
  */
 function processPaystack($amount, $reference, $name, $email, $phone) {
-    // Placeholder: Integrate with Paystack API for verification
-    // In real implementation, verify the payment with Paystack API using the reference
-
-    // Simulate verification
-    $verification_response = simulatePaystackVerification($reference);
-
-    if ($verification_response['success']) {
-        $transaction_id = 'PAYSTACK_' . time() . '_' . rand(1000, 9999);
-        // logTransaction($transaction_id, $amount, 'paystack');
-
-        return [
-            'success' => true,
-            'message' => 'Paystack payment verified successfully.',
-            'transaction_id' => $transaction_id
-        ];
-    } else {
-        return ['error' => 'Paystack payment verification failed: ' . $verification_response['message']];
+    if (empty($reference)) {
+        return ['error' => 'Missing Paystack reference.'];
     }
+    if (empty(PAYSTACK_SECRET_KEY)) {
+        return ['error' => 'Paystack secret key is not configured.'];
+    }
+
+    $url = 'https://api.paystack.co/transaction/verify/' . urlencode($reference);
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            'Authorization: Bearer ' . PAYSTACK_SECRET_KEY,
+            'Accept: application/json'
+        ],
+        CURLOPT_TIMEOUT => 30
+    ]);
+    $response = curl_exec($ch);
+    $err = curl_error($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($err) {
+        return ['error' => 'Paystack verification failed: ' . $err];
+    }
+    if ($status !== 200) {
+        return ['error' => 'Paystack verification failed: HTTP ' . $status];
+    }
+
+    $payload = json_decode($response, true);
+    if (!$payload || empty($payload['data'])) {
+        return ['error' => 'Paystack verification response invalid.'];
+    }
+
+    $data = $payload['data'];
+    $paid = isset($data['status']) && $data['status'] === 'success';
+    $paidAmount = isset($data['amount']) ? ($data['amount'] / 100) : 0;
+    $currency = $data['currency'] ?? 'GHS';
+
+    if (!$paid) {
+        return ['error' => 'Paystack payment not successful.'];
+    }
+    if ($currency !== 'GHS') {
+        return ['error' => 'Currency mismatch: expected GHS.'];
+    }
+    if ($paidAmount < $amount) {
+        return ['error' => 'Amount mismatch.'];
+    }
+
+    $transaction_id = $data['reference'] ?? ('PAYSTACK_' . time());
+
+    // Store payment (optional)
+    try {
+        $pdo = db();
+        $donation_id = $_SESSION['donation_id'] ?? null;
+        $stmt = $pdo->prepare('INSERT INTO payments (donation_id, method, amount, reference, status, created_at) VALUES (?, ?, ?, ?, ?, NOW())');
+        $stmt->execute([$donation_id, 'paystack', $paidAmount, $transaction_id, 'success']);
+        if ($donation_id) {
+            $pdo->prepare('UPDATE donations SET status = ? WHERE id = ?')->execute(['paid', $donation_id]);
+        }
+    } catch (Exception $e) {
+        // Ignore DB failures in payment response
+    }
+
+    return [
+        'success' => true,
+        'message' => 'Paystack payment verified successfully.',
+        'transaction_id' => $transaction_id
+    ];
 }
 
 // Simulation functions (replace with real API calls)
@@ -191,7 +244,7 @@ function simulatePaymentGatewayAPI($amount, $card_data, $type) {
  * Simulate Paystack verification
  */
 function simulatePaystackVerification($reference) {
-    // Placeholder: Replace with actual verification API call
+    // Deprecated (kept for backward compatibility)
     return ['success' => true, 'message' => 'Payment verified'];
 }
 
