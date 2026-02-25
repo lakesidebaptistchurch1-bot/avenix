@@ -31,20 +31,25 @@ function db() {
         return $pdo;
     }
 
-    $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb4';
+    $dbHost = env_file_value('DB_HOST') ?? env('DB_HOST', DB_HOST);
+    $dbName = env_file_value('DB_NAME') ?? env('DB_NAME', DB_NAME);
+    $dbUser = env_file_value('DB_USER') ?? env('DB_USER', DB_USER);
+    $dbPass = env_file_value('DB_PASS') ?? env('DB_PASS', DB_PASS);
+
+    $dsn = 'mysql:host=' . $dbHost . ';dbname=' . $dbName . ';charset=utf8mb4';
     $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
     ];
 
     try {
-        $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+        $pdo = new PDO($dsn, $dbUser, $dbPass, $options);
     } catch (PDOException $e) {
         // Auto-create DB in local/dev if enabled
         if (DB_AUTO_CREATE && strpos($e->getMessage(), 'Unknown database') !== false) {
-            $pdo = new PDO('mysql:host=' . DB_HOST . ';charset=utf8mb4', DB_USER, DB_PASS, $options);
-            $pdo->exec('CREATE DATABASE IF NOT EXISTS `' . DB_NAME . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
-            $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
+            $pdo = new PDO('mysql:host=' . $dbHost . ';charset=utf8mb4', $dbUser, $dbPass, $options);
+            $pdo->exec('CREATE DATABASE IF NOT EXISTS `' . $dbName . '` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci');
+            $pdo = new PDO($dsn, $dbUser, $dbPass, $options);
         } else {
             throw $e;
         }
@@ -59,6 +64,12 @@ function db() {
 function env($key, $default = null) {
     $value = getenv($key);
     if ($value === false) {
+        if (isset($_ENV[$key])) {
+            return $_ENV[$key];
+        }
+        if (isset($_SERVER[$key])) {
+            return $_SERVER[$key];
+        }
         return $default;
     }
     return $value;
@@ -86,6 +97,35 @@ function load_env($path) {
         putenv("$key=$value");
         $_ENV[$key] = $value;
     }
+}
+
+/**
+ * Read a value directly from .env files without relying on getenv.
+ */
+function env_file_value($key) {
+    $paths = [__DIR__ . '/.env', __DIR__ . '/../.env'];
+    foreach ($paths as $path) {
+        if (!file_exists($path)) {
+            continue;
+        }
+        $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            if (strpos(trim($line), '#') === 0) {
+                continue;
+            }
+            if (strpos($line, '=') === false) {
+                continue;
+            }
+            list($k, $v) = explode('=', $line, 2);
+            $k = trim($k);
+            if ($k !== $key) {
+                continue;
+            }
+            $v = trim($v);
+            return trim($v, "\"'");
+        }
+    }
+    return null;
 }
 
 /**

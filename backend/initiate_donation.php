@@ -1,9 +1,10 @@
 <?php
 // initiate_donation.php - Handles initial donation form submission
 session_start();
+require_once __DIR__ . '/config.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ../donation.html');
+    header('Location: ../donation.php');
     exit;
 }
 
@@ -19,20 +20,17 @@ $note = isset($_POST['donation_note']) ? trim($_POST['donation_note']) : '';
 
 // Basic validation
 if ($amount <= 0) {
-    $_SESSION['error'] = 'Please enter a valid donation amount.';
-    header('Location: ../donation.html');
+    header('Location: ../donation.php?error=' . urlencode('Please enter a valid donation amount.'));
     exit;
 }
 
 if (empty($fname) || empty($lname) || empty($email)) {
-    $_SESSION['error'] = 'First name, last name, and email are required.';
-    header('Location: ../donation.html');
+    header('Location: ../donation.php?error=' . urlencode('First name, last name, and email are required.'));
     exit;
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $_SESSION['error'] = 'Please enter a valid email address.';
-    header('Location: ../donation.html');
+    header('Location: ../donation.php?error=' . urlencode('Please enter a valid email address.'));
     exit;
 }
 
