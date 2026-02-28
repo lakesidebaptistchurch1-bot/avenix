@@ -85,7 +85,7 @@ unset($_SESSION['auth_error'], $_SESSION['auth_success'], $_SESSION['auth_info']
                     <div class="auth-alert"><?php echo htmlspecialchars($error); ?></div>
                 <?php endif; ?>
 
-                <form action="backend/auth_login.php" method="POST">
+                <form action="backend/auth_controller.php?action=login" method="POST">
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" id="email" name="email" class="form-control" required>
