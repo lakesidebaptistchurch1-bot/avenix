@@ -1,6 +1,12 @@
 <?php
 // backend/auth.php
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/security.php';
+
+// Apply headers early (only if no output yet)
+if (function_exists('security_headers') && !headers_sent()) {
+    security_headers();
+}
 
 /**
  * CSRF
@@ -51,15 +57,21 @@ function logout_user(): void {
     session_regenerate_id(true);
 }
 
+/**
+ * Require login
+ */
 function require_login(string $redirectTo = 'login.php'): void {
     if (!current_user()) {
-        $_SESSION['redirect_after_login'] = '/payment.php';
-        safe_redirect($redirectTo);
+        // Save where user wanted to go (only set if not set)
+        if (empty($_SESSION['redirect_after_login'])) {
+            $_SESSION['redirect_after_login'] = '/lbc_project/payment.php';
+        }
+        safe_redirect('/lbc_project/' . ltrim($redirectTo, '/'));
     }
 }
 
 /**
- * Simple session-based rate limiting (good enough for localhost)
+ * Simple session-based rate limiting
  */
 function rl_key(string $name): string {
     return 'rl_' . $name;
