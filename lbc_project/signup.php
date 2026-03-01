@@ -39,7 +39,7 @@ $csrf = csrf_token();
                     <div class="auth-alert"><?php echo htmlspecialchars($error); ?></div>
                 <?php endif; ?>
 
-                <form action="backend/auth_controller.php?action=register" method="POST" id="signupForm">
+                <form action="/lbc_project/backend/auth_controller.php?action=register" method="POST" id="signupForm" class="auth-form-inner">
                     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf); ?>">
 
                     <div class="form-group">
