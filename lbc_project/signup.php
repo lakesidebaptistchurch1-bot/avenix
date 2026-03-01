@@ -7,6 +7,8 @@ if (current_user()) {
 $error = $_SESSION['auth_error'] ?? '';
 $info = $_SESSION['auth_info'] ?? '';
 unset($_SESSION['auth_error'], $_SESSION['auth_info']);
+
+$csrf = csrf_token();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +26,6 @@ unset($_SESSION['auth_error'], $_SESSION['auth_info']);
 <body>
     <main class="auth-page">
         <div class="auth-card">
-            <!-- Left: form -->
             <div class="auth-form">
                 <div class="auth-header">
                     <h1>Create your account</h1>
@@ -38,24 +39,38 @@ unset($_SESSION['auth_error'], $_SESSION['auth_info']);
                     <div class="auth-alert"><?php echo htmlspecialchars($error); ?></div>
                 <?php endif; ?>
 
-                <form action="backend/auth_register.php" method="POST" id="signupForm">
+                <form action="backend/auth_controller.php?action=register" method="POST" id="signupForm">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf); ?>">
+
                     <div class="form-group">
                         <label for="name">Full Name</label>
                         <input type="text" id="name" name="name" class="form-control" required>
                     </div>
+
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" id="email" name="email" class="form-control" required>
                     </div>
+
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password" class="form-control" minlength="8" maxlength="12" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,12}" required>
-                        <small class="form-hint">8-12 chars with upper, lower, number, and special.</small>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            minlength="8"
+                            maxlength="64"
+                            required
+                        >
+                        <small class="form-hint">Min 8 characters (you can use letters, numbers, symbols).</small>
                     </div>
+
                     <div class="form-group">
                         <label for="confirm_password">Confirm Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="8" maxlength="12" required>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="8" maxlength="64" required>
                     </div>
+
                     <button type="submit" class="btn-default btn-block">Create account</button>
                 </form>
 
@@ -64,9 +79,7 @@ unset($_SESSION['auth_error'], $_SESSION['auth_info']);
                 </p>
             </div>
 
-            <!-- Right: visual -->
             <div class="auth-visual">
-                <!-- Replace image with the provided design asset -->
                 <img src="images/auth-plant.png" alt="Welcome">
                 <div class="auth-visual-text">
                     <h3>Give with confidence</h3>
@@ -81,12 +94,6 @@ unset($_SESSION['auth_error'], $_SESSION['auth_info']);
         $('#signupForm').on('submit', function () {
             var pass = $('#password').val();
             var confirm = $('#confirm_password').val();
-            var pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,12}$/;
-
-            if (!pattern.test(pass)) {
-                alert('Password must be 8-12 chars with upper, lower, number, and special.');
-                return false;
-            }
             if (pass !== confirm) {
                 alert('Passwords do not match.');
                 return false;

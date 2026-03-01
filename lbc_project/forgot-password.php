@@ -4,6 +4,8 @@ $error = $_SESSION['auth_error'] ?? '';
 $success = $_SESSION['auth_success'] ?? '';
 $reset_link = $_SESSION['reset_link'] ?? '';
 unset($_SESSION['auth_error'], $_SESSION['auth_success'], $_SESSION['reset_link']);
+
+$csrf = csrf_token();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -39,11 +41,14 @@ unset($_SESSION['auth_error'], $_SESSION['auth_success'], $_SESSION['reset_link'
                     </div>
                 <?php endif; ?>
 
-                <form action="backend/auth_request_reset.php" method="POST">
+                <form action="backend/auth_controller.php?action=request_reset" method="POST">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf); ?>">
+
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" id="email" name="email" class="form-control" required>
                     </div>
+
                     <button type="submit" class="btn-default btn-block">Send reset link</button>
                 </form>
 

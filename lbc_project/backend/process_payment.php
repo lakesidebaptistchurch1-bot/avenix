@@ -4,6 +4,19 @@ require_once __DIR__ . '/auth.php';
 
 header('Content-Type: application/json');
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['error' => 'Method not allowed']);
+    exit;
+}
+
+// ✅ CSRF
+if (!csrf_check($_POST['csrf_token'] ?? '')) {
+    http_response_code(419);
+    echo json_encode(['error' => 'Session expired. Please refresh and try again.']);
+    exit;
+}
+
 // Must be logged in
 if (!current_user()) {
     http_response_code(401);
@@ -14,6 +27,7 @@ if (!current_user()) {
 // Donation session must exist
 $donation = $_SESSION['donation'] ?? null;
 $donation_id = $_SESSION['donation_id'] ?? null;
+
 if (!$donation || !$donation_id) {
     http_response_code(400);
     echo json_encode(['error' => 'Donation session missing. Please start again.']);
@@ -24,14 +38,9 @@ if (!$donation || !$donation_id) {
 $amount = (float)$donation['amount'];
 $currency = $donation['currency'] ?? 'GHS';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['error' => 'Method not allowed']);
-    exit;
-}
-
 $payment_method = $_POST['payment_method'] ?? '';
 $valid_methods = ['mobile_money', 'card', 'paystack'];
+
 if (!in_array($payment_method, $valid_methods, true)) {
     http_response_code(400);
     echo json_encode(['error' => 'Invalid payment method']);
@@ -39,21 +48,20 @@ if (!in_array($payment_method, $valid_methods, true)) {
 }
 
 switch ($payment_method) {
+
     case 'mobile_money':
-        // Placeholder only (you need real MoMo provider / aggregator API)
         echo json_encode([
             'success' => true,
             'message' => 'Mobile money is not integrated yet. Use Paystack for now.',
-            'transaction_id' => 'MOMO_PLACEHOLDER'
+            'redirect_url' => 'donation.php'
         ]);
         exit;
 
     case 'card':
-        // Placeholder only (do NOT collect raw card data in PHP for production)
         echo json_encode([
             'success' => true,
             'message' => 'Card is not integrated yet. Use Paystack for now.',
-            'transaction_id' => 'CARD_PLACEHOLDER'
+            'redirect_url' => 'donation.php'
         ]);
         exit;
 
@@ -64,6 +72,7 @@ switch ($payment_method) {
             echo json_encode(['error' => 'Missing Paystack reference.']);
             exit;
         }
+
         if (PAYSTACK_SECRET_KEY === '') {
             http_response_code(500);
             echo json_encode(['error' => 'Paystack secret key is not configured.']);
@@ -71,8 +80,8 @@ switch ($payment_method) {
         }
 
         $result = verify_paystack($reference);
+
         if (!$result['ok']) {
-            // store failed payment record
             try_store_payment($donation_id, 'paystack', $amount, $currency, $reference, 'failed', 'paystack', $result['raw']);
             echo json_encode(['error' => $result['message']]);
             exit;
@@ -87,7 +96,6 @@ switch ($payment_method) {
             exit;
         }
 
-        // Allow exact match (or >=, if you want to allow tips)
         if ($paidAmount < $amount) {
             try_store_payment($donation_id, 'paystack', $amount, $currency, $reference, 'failed', 'paystack', $result['raw']);
             echo json_encode(['error' => 'Amount mismatch.']);
@@ -103,10 +111,14 @@ switch ($payment_method) {
             $pdo->prepare("UPDATE donations SET status='paid' WHERE id=?")->execute([(int)$donation_id]);
         } catch (Exception $e) {}
 
+        // ✅ Clear session so user can’t re-use old donation
+        unset($_SESSION['donation'], $_SESSION['donation_id']);
+
         echo json_encode([
             'success' => true,
-            'message' => 'Paystack payment verified successfully.',
-            'transaction_id' => $reference
+            'message' => 'Payment verified successfully.',
+            'transaction_id' => $reference,
+            'redirect_url' => 'thank-you.php?ref=' . urlencode($reference)
         ]);
         exit;
 }

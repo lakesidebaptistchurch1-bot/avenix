@@ -2,87 +2,89 @@
 // backend/auth.php
 require_once __DIR__ . '/config.php';
 
-// Security headers (safe for most sites)
-security_headers();
-
-if (session_status() === PHP_SESSION_NONE) {
-    ini_set('session.use_strict_mode', '1');
-    ini_set('session.cookie_httponly', '1');
-    ini_set('session.cookie_samesite', 'Lax'); // PHP supports SameSite via ini :contentReference[oaicite:2]{index=2}
-
-    if (APP_ENV === 'production') {
-        ini_set('session.cookie_secure', '1');
-    }
-
-    session_start();
-}
-
-function current_user() {
-    return $_SESSION['user'] ?? null;
-}
-
-function login_user(array $user) {
-    session_regenerate_id(true);
-    $_SESSION['user'] = [
-        'id' => (int)($user['id'] ?? 0),
-        'name' => $user['name'] ?? '',
-        'email' => $user['email'] ?? ''
-    ];
-}
-
-function logout_user() {
-    $_SESSION = [];
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000,
-            $params["path"], $params["domain"], $params["secure"], $params["httponly"]
-        );
-    }
-    session_destroy();
-}
-
-function require_login($login_page = 'login.php') {
-    if (!current_user()) {
-        $_SESSION['redirect_after_login'] = '/payment.php';
-        safe_redirect('../' . ltrim($login_page, '/'));
-    }
-}
-
-function csrf_token() {
+/**
+ * CSRF
+ */
+function csrf_token(): string {
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
     return $_SESSION['csrf_token'];
 }
 
-function csrf_check($token) {
-    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], (string)$token);
+function csrf_check(string $token): bool {
+    return !empty($token) && !empty($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 
-function safe_redirect($path) {
+/**
+ * Redirect helper (prevents header injection)
+ */
+function safe_redirect(string $path): void {
+    // Allow only relative redirects
+    if (preg_match('~^https?://~i', $path)) {
+        $path = '/';
+    }
     header('Location: ' . $path);
     exit;
 }
 
-/* -------- Rate limit helpers (simple per-session limiter) -------- */
-function rate_limit_ok(string $key, int $maxAttempts, int $windowSeconds): bool {
-    $now = time();
-    $bucket = $_SESSION['rl'][$key] ?? ['count' => 0, 'start' => $now];
+/**
+ * Auth helpers
+ */
+function current_user(): ?array {
+    return $_SESSION['user'] ?? null;
+}
 
-    if (($now - $bucket['start']) > $windowSeconds) {
-        $_SESSION['rl'][$key] = ['count' => 0, 'start' => $now];
-        return true;
-    }
-    return ($bucket['count'] < $maxAttempts);
+function login_user(array $user): void {
+    // Prevent session fixation
+    session_regenerate_id(true);
+
+    $_SESSION['user'] = [
+        'id'    => (int)($user['id'] ?? 0),
+        'name'  => (string)($user['name'] ?? ''),
+        'email' => (string)($user['email'] ?? ''),
+    ];
 }
-function rate_limit_hit(string $key): void {
-    $now = time();
-    if (!isset($_SESSION['rl'][$key])) {
-        $_SESSION['rl'][$key] = ['count' => 1, 'start' => $now];
-        return;
-    }
-    $_SESSION['rl'][$key]['count']++;
+
+function logout_user(): void {
+    unset($_SESSION['user']);
+    session_regenerate_id(true);
 }
-function rate_limit_reset(string $key): void {
-    unset($_SESSION['rl'][$key]);
+
+function require_login(string $redirectTo = 'login.php'): void {
+    if (!current_user()) {
+        $_SESSION['redirect_after_login'] = '/payment.php';
+        safe_redirect($redirectTo);
+    }
+}
+
+/**
+ * Simple session-based rate limiting (good enough for localhost)
+ */
+function rl_key(string $name): string {
+    return 'rl_' . $name;
+}
+
+function rl_ok(string $name, int $maxAttempts, int $windowSeconds): bool {
+    $k = rl_key($name);
+    $data = $_SESSION[$k] ?? ['count' => 0, 'start' => time()];
+
+    // reset window
+    if ((time() - (int)$data['start']) > $windowSeconds) {
+        $data = ['count' => 0, 'start' => time()];
+    }
+
+    $_SESSION[$k] = $data;
+    return ((int)$data['count'] < $maxAttempts);
+}
+
+function rl_hit(string $name): void {
+    $k = rl_key($name);
+    $data = $_SESSION[$k] ?? ['count' => 0, 'start' => time()];
+    $data['count'] = ((int)$data['count']) + 1;
+    $_SESSION[$k] = $data;
+}
+
+function rl_reset(string $name): void {
+    unset($_SESSION[rl_key($name)]);
 }

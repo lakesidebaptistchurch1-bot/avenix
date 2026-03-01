@@ -1,7 +1,11 @@
 <?php
 require_once __DIR__ . '/backend/auth.php';
+
 $user = current_user();
 $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : '';
+
+// CSRF token for forms (donate + logout)
+$csrf = csrf_token();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,18 +14,16 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donate — Lakeside Baptist Church</title>
     <link rel="shortcut icon" href="images/LBC LOGO.png">
-    <!-- Google Fonts -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
+
     <link href="css/all.css" rel="stylesheet">
-    <!-- Donation page styles -->
     <link href="css/donation-page.css" rel="stylesheet">
 </head>
 <body class="dp-body">
 
-<!-- Top bar -->
 <header class="dp-topbar">
     <a href="index-slider.html" class="dp-topbar-logo">
         <img src="images/LBC LOGO.png" alt="Lakeside Baptist Church">
@@ -38,7 +40,15 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
                 <i class="fas fa-user-circle"></i>
                 <span><?php echo htmlspecialchars($user['name']); ?></span>
             </div>
-            <a href="backend/auth_logout.php" class="dp-signout">Sign out</a>
+
+            <!-- ✅ Logout must be POST + CSRF -->
+            <form action="backend/auth_controller.php?action=logout" method="POST" style="display:inline;">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf); ?>">
+                <button type="submit" class="dp-signout" style="background:none;border:none;padding:0;cursor:pointer;">
+                    Sign out
+                </button>
+            </form>
+
         <?php else: ?>
             <div class="dp-guest-bar">
                 <span>Have an account?</span>
@@ -50,10 +60,7 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
     </nav>
 </header>
 
-<!-- Page body -->
 <div class="dp-page">
-
-    <!-- Left — impact panel -->
     <div class="dp-left">
         <div class="dp-left-inner">
             <span class="dp-eyebrow"><i class="fas fa-heart"></i> Your Gift Matters</span>
@@ -63,7 +70,7 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
             </h1>
 
             <p class="dp-subtext">
-                Your generosity directly supports ministry, youth outreach, and community care at Lakeside Baptist Church. Every donation — big or small — makes a lasting difference.
+                Your generosity directly supports ministry, youth outreach, and community care at Lakeside Baptist Church.
             </p>
 
             <div class="dp-stats">
@@ -87,20 +94,13 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
                 <div class="dp-trust-item"><i class="fas fa-envelope-open-text"></i> Email Receipt</div>
                 <div class="dp-trust-item"><i class="fas fa-hand-holding-heart"></i> Direct Impact</div>
             </div>
-
-            <div class="dp-quote">
-                <p>"Giving to Lakeside has been one of the most rewarding parts of my faith journey. I know my gift truly makes a difference."</p>
-                <cite>— Church Member, Lakeside Baptist</cite>
-            </div>
         </div>
     </div>
 
-    <!-- Right — form panel -->
     <div class="dp-right">
         <div class="dp-form-box">
 
             <?php if (!$user): ?>
-            <!-- Login hint shown only to guests -->
             <div class="dp-guest-hint">
                 <i class="fas fa-user-circle"></i>
                 <span>Already have an account? Sign in for a faster checkout.</span>
@@ -113,10 +113,11 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
                 <p class="dp-card-sub">Choose a preset amount or enter your own below.</p>
 
                 <form id="donateForm" action="backend/initiate_donation.php" method="POST">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf); ?>">
+
                     <!-- Amount resolved by JS before submit -->
                     <input type="hidden" name="custom_amount" id="resolved_amount">
 
-                    <!-- Preset amounts -->
                     <div class="dp-amount-sec">
                         <label class="dp-field-lbl">Select Amount (GH₵)</label>
                         <div class="dp-amounts">
@@ -127,14 +128,13 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
                             <button type="button" class="dp-amt-btn" data-val="500">GH₵ 500</button>
                             <button type="button" class="dp-amt-btn" data-val="600">GH₵ 600</button>
                         </div>
-                        <!-- Custom amount -->
+
                         <div class="dp-custom-wrap">
                             <span class="dp-custom-pre">GH₵</span>
                             <input type="number" id="custom_amt" class="dp-input" placeholder="Other amount" min="1" step="0.01">
                         </div>
                     </div>
 
-                    <!-- Donor info -->
                     <div class="dp-fields">
                         <label class="dp-field-lbl">Your Details</label>
                         <div class="dp-row">
@@ -145,22 +145,22 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
                                 <input type="text" name="lname" id="lname" class="dp-input" placeholder="Last Name" required>
                             </div>
                         </div>
+
                         <div class="dp-field">
                             <input type="email" name="email" id="email" class="dp-input" placeholder="Email Address" required
                                 <?php if ($user): ?>value="<?php echo htmlspecialchars($user['email']); ?>"<?php endif; ?>>
                         </div>
+
                         <div class="dp-field">
                             <input type="text" name="donation_note" class="dp-input" placeholder="Add a note or dedication (optional)">
                         </div>
                     </div>
 
-                    <!-- Error -->
                     <?php if ($err): ?>
                         <div class="dp-error"><?php echo $err; ?></div>
                     <?php endif; ?>
                     <div id="dp-err" class="dp-error" style="display:none"></div>
 
-                    <!-- Submit -->
                     <button type="submit" class="dp-submit">
                         <i class="fas fa-heart"></i>
                         Continue to Payment
@@ -174,7 +174,13 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
                     <div class="dp-footer-note">
                         <?php if ($user): ?>
                             Signed in as <strong><?php echo htmlspecialchars($user['name']); ?></strong>.
-                            <a href="backend/auth_logout.php">Not you? Sign out</a>
+                            <!-- ✅ Logout again (POST + CSRF) -->
+                            <form action="backend/auth_controller.php?action=logout" method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf); ?>">
+                                <button type="submit" style="background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;">
+                                    Not you? Sign out
+                                </button>
+                            </form>
                         <?php else: ?>
                             New here? <a href="signup.php">Create a free account</a> to track your giving.
                         <?php endif; ?>
@@ -184,7 +190,6 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
 
         </div>
     </div>
-
 </div>
 
 <script src="js/jquery-3.7.1.min.js"></script>
@@ -192,7 +197,6 @@ $err  = isset($_GET['error']) ? htmlspecialchars(urldecode($_GET['error'])) : ''
 $(function(){
     var selected = 100;
 
-    // Pill buttons
     $('.dp-amt-btn').on('click', function(){
         $('.dp-amt-btn').removeClass('active');
         $(this).addClass('active');
@@ -200,7 +204,6 @@ $(function(){
         $('#custom_amt').val('');
     });
 
-    // Custom input deselects pills
     $('#custom_amt').on('input', function(){
         if($(this).val()){
             $('.dp-amt-btn').removeClass('active');
@@ -211,7 +214,6 @@ $(function(){
         }
     });
 
-    // On submit: validate then set hidden field
     $('#donateForm').on('submit', function(e){
         var custom = parseFloat($('#custom_amt').val());
         var amount = (custom > 0) ? custom : selected;
@@ -222,6 +224,7 @@ $(function(){
             $('html,body').animate({scrollTop:$('#dp-err').offset().top - 20}, 300);
             return false;
         }
+
         $('#resolved_amount').val(amount);
     });
 });
