@@ -3,6 +3,8 @@ require_once __DIR__ . '/backend/auth.php';
 $token = $_GET['token'] ?? '';
 $error = $_SESSION['auth_error'] ?? '';
 unset($_SESSION['auth_error']);
+
+$csrf = csrf_token();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,16 +32,20 @@ unset($_SESSION['auth_error']);
                     <div class="auth-alert"><?php echo htmlspecialchars($error); ?></div>
                 <?php endif; ?>
 
-                <form action="backend/auth_reset.php" method="POST" id="resetForm">
+                <form action="backend/auth_controller.php?action=reset_password" method="POST" id="resetForm">
+                    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf); ?>">
                     <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
+
                     <div class="form-group">
                         <label for="password">New Password</label>
-                        <input type="password" id="password" name="password" class="form-control" minlength="8" maxlength="12" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,12}" required>
+                        <input type="password" id="password" name="password" class="form-control" minlength="8" maxlength="64" required>
                     </div>
+
                     <div class="form-group">
                         <label for="confirm_password">Confirm Password</label>
-                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="8" maxlength="12" required>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" minlength="8" maxlength="64" required>
                     </div>
+
                     <button type="submit" class="btn-default btn-block">Update password</button>
                 </form>
             </div>

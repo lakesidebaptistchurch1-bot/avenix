@@ -28,17 +28,13 @@ if (!$event || empty($event['event']) || empty($event['data'])) {
 if ($event['event'] === 'charge.success') {
     $data = $event['data'];
     $reference = $data['reference'] ?? '';
-    $amount = isset($data['amount']) ? ((float)$data['amount'] / 100.0) : 0.0;
-    $currency = $data['currency'] ?? 'GHS';
 
     try {
         $pdo = db();
 
-        // Update payment record if exists
         $pdo->prepare("UPDATE payments SET status='success', provider_response=? WHERE reference=?")
             ->execute([json_encode($event), $reference]);
 
-        // If payment exists, mark donation paid too
         $stmt = $pdo->prepare("SELECT donation_id FROM payments WHERE reference=? LIMIT 1");
         $stmt->execute([$reference]);
         $row = $stmt->fetch();
