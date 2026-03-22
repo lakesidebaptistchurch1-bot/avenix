@@ -44,9 +44,13 @@ export async function POST(req: Request) {
       expires_at: expiresAt.toISOString(),
     });
 
-    const base = env.BASE_URL || "http://localhost:3000";
-    const resetUrl = `${base}/reset-password?token=${encodeURIComponent(token)}`;
-
+    const base =
+    env.BASE_URL ||
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000");
+  
+  const resetUrl = `${base}/reset-password?token=${encodeURIComponent(token)}`;
     return NextResponse.json({
       ok: true,
       ...(env.NODE_ENV === "production" ? {} : { resetUrl }),

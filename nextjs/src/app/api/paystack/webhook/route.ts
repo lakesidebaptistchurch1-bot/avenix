@@ -1,18 +1,12 @@
 import { NextResponse } from "next/server";
-import type { RowDataPacket } from "mysql2/promise";
-import { dbPool } from "@/lib/db";
+import { supabaseAdmin } from "@/lib/supabase";
 import { verifyPaystackWebhookSignature } from "@/lib/paystack";
 
 export const runtime = "nodejs";
 
 /**
- * Paystack webhook endpoint.
- *
- * Legacy equivalent: `lbc_project/backend/paystack_webhook.php`
- *
- * Configure this URL in Paystack dashboard (events: charge.success).
+ * Paystack webhook endpoint (Supabase version)
  */
-type PaymentRow = RowDataPacket & { donation_id: number | null };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -22,13 +16,15 @@ export async function POST(req: Request) {
   const raw = await req.text();
   const signature = req.headers.get("x-paystack-signature") ?? "";
 
+  // ✅ Verify Paystack signature
   if (!verifyPaystackWebhookSignature(raw, signature)) {
     return new NextResponse("Invalid signature", { status: 401 });
   }
 
   let event: unknown;
+
   try {
-    event = JSON.parse(raw) as unknown;
+    event = JSON.parse(raw);
   } catch {
     return new NextResponse("Invalid payload", { status: 400 });
   }
@@ -37,56 +33,83 @@ export async function POST(req: Request) {
     return new NextResponse("Invalid payload", { status: 400 });
   }
 
-  // We only care about successful charges for donation settlement.
+  // ✅ Only process successful payments
   if (event.event !== "charge.success") {
     return new NextResponse("ok", { status: 200 });
   }
 
-  const reference = typeof event.data.reference === "string" ? event.data.reference.trim() : "";
+  const reference =
+    typeof event.data.reference === "string" ? event.data.reference.trim() : "";
+
   if (!reference) {
     return new NextResponse("Missing reference", { status: 400 });
   }
 
-  const paidAmount = typeof event.data.amount === "number" ? event.data.amount / 100 : null;
-  const currency = typeof event.data.currency === "string" ? event.data.currency : "GHS";
+  const paidAmount =
+    typeof event.data.amount === "number" ? event.data.amount / 100 : null;
 
-  // If we sent donationId in metadata, use it; otherwise try to find it from our payments table.
+  const currency =
+    typeof event.data.currency === "string" ? event.data.currency : "GHS";
+
+  // ✅ Extract donation ID from metadata
   const metadata = isRecord(event.data.metadata) ? event.data.metadata : null;
-  const donationIdFromMetaRaw = metadata?.donation_id;
-  const donationIdFromMeta =
-    typeof donationIdFromMetaRaw === "number" ? donationIdFromMetaRaw : Number(donationIdFromMetaRaw);
-  const donationId = Number.isFinite(donationIdFromMeta) && donationIdFromMeta > 0 ? donationIdFromMeta : null;
 
-  const pool = dbPool();
-  const conn = await pool.getConnection();
+  const donationIdRaw = metadata?.donation_id;
+  const donationId =
+    typeof donationIdRaw === "number"
+      ? donationIdRaw
+      : Number(donationIdRaw);
+
+  let resolvedDonationId: number | null =
+    Number.isFinite(donationId) && donationId > 0 ? donationId : null;
 
   try {
-    let resolvedDonationId: number | null = donationId;
-
+    // ✅ If no donationId, find it from payments table
     if (!resolvedDonationId) {
-      const [rows] = await conn.execute<PaymentRow[]>(
-        "SELECT donation_id FROM payments WHERE reference = ? LIMIT 1",
-        [reference],
+      const { data } = await supabaseAdmin
+        .from("payments")
+        .select("donation_id")
+        .eq("reference", reference)
+        .single();
+
+      resolvedDonationId = data?.donation_id ?? null;
+    }
+
+    // ✅ Insert / update payment
+    const { error: paymentError } = await supabaseAdmin
+      .from("payments")
+      .upsert(
+        {
+          donation_id: resolvedDonationId,
+          method: "paystack",
+          amount: paidAmount ?? 0,
+          currency,
+          reference,
+          status: "success",
+          provider: "paystack",
+          provider_response: event,
+        },
+        { onConflict: "reference" } // 👈 VERY IMPORTANT
       );
-      resolvedDonationId = rows[0]?.donation_id ?? null;
+
+    if (paymentError) {
+      console.error(paymentError);
+      return new NextResponse("ok", { status: 200 });
     }
 
-    // Upsert payment as successful.
-    await conn.execute(
-      "INSERT INTO payments (donation_id, method, amount, currency, reference, status, provider, provider_response, created_at) VALUES (?, 'paystack', ?, ?, ?, 'success', 'paystack', ?, NOW()) ON DUPLICATE KEY UPDATE status='success', provider_response=VALUES(provider_response), amount=VALUES(amount), currency=VALUES(currency), donation_id=IFNULL(donation_id, VALUES(donation_id))",
-      [resolvedDonationId, paidAmount ?? 0, currency, reference, JSON.stringify(event)],
-    );
-
+    // ✅ Update donation status
     if (resolvedDonationId) {
-      await conn.execute("UPDATE donations SET status='paid' WHERE id = ?", [resolvedDonationId]);
+      await supabaseAdmin
+        .from("donations")
+        .update({ status: "paid" })
+        .eq("id", resolvedDonationId);
     }
-  } catch {
-    // Always return 200 to prevent Paystack retry storms; failures can be reconciled via manual verify.
+  } catch (error) {
+    console.error(error);
+
+    // Always return 200 to prevent Paystack retry storms
     return new NextResponse("ok", { status: 200 });
-  } finally {
-    conn.release();
   }
 
   return new NextResponse("ok", { status: 200 });
 }
-

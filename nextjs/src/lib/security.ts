@@ -1,14 +1,17 @@
-import crypto from "node:crypto";
-import { createId } from "@paralleldrive/cuid2";
+// src/lib/security.ts
 
+import crypto from "crypto";
+
+/**
+ * Generate a secure random token
+ */
+export function secureRandomToken(length = 32): string {
+  return crypto.randomBytes(length).toString("hex");
+}
+
+/**
+ * Hash a token (for storing in DB safely)
+ */
 export function hashToken(token: string): string {
   return crypto.createHash("sha256").update(token).digest("hex");
 }
-
-export function secureRandomToken(bytes = 32): string {
-  // Prefer deterministic length, URL-safe IDs unless the caller needs raw bytes.
-  // Note: cuid2 is not a cryptographic token generator, but is strong enough for reset tokens
-  // when combined with server-side hashing + expiry + single-use semantics.
-  return bytes === 32 ? createId() : crypto.randomBytes(bytes).toString("hex");
-}
-
