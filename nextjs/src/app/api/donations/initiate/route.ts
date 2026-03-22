@@ -1,93 +1,68 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import type { ResultSetHeader } from "mysql2/promise";
-import { dbPool } from "@/lib/db";
+import { supabaseAdmin } from "@/lib/supabase";
 import { getSessionUser } from "@/lib/auth/session";
 import { setCheckoutDonationId } from "@/lib/checkout";
 
-export const runtime = "nodejs";
-
-/**
- * Create a pending donation and start the checkout flow.
- *
- * This replaces:
- * - `lbc_project/backend/initiate_donation.php`
- * - the PHP session variables used to pass donation info to `payment.php`
- */
 const bodySchema = z.object({
-  amount: z.coerce.number().positive().max(1_000_000),
+  amount: z.number().positive(),
   firstName: z.string().trim().min(1).max(60),
   lastName: z.string().trim().min(1).max(60),
-  email: z.string().trim().email().max(180),
-  note: z.string().trim().max(255).optional().or(z.literal("")),
+  email: z.string().email().max(180),
+  note: z.string().max(500).optional(),
 });
 
-function str(v: FormDataEntryValue | null): string {
-  return typeof v === "string" ? v : "";
-}
-
-/**
- * Support both:
- * - JSON payloads from the Next.js UI
- * - legacy HTML form posts (`backend/initiate_donation.php` rewrite)
- */
-async function readInput(req: Request): Promise<unknown> {
-  const ct = req.headers.get("content-type") ?? "";
-  if (ct.includes("application/json")) {
-    return await req.json().catch(() => null);
-  }
-
-  // For legacy `<form method="POST">` submissions.
-  if (ct.includes("application/x-www-form-urlencoded") || ct.includes("multipart/form-data")) {
-    const fd = await req.formData().catch(() => null);
-    if (!fd) return null;
-
-    return {
-      amount: str(fd.get("amount")) || str(fd.get("custom_amount")),
-      firstName: str(fd.get("firstName")) || str(fd.get("fname")),
-      lastName: str(fd.get("lastName")) || str(fd.get("lname")),
-      email: str(fd.get("email")),
-      note: str(fd.get("note")) || str(fd.get("donation_note")),
-    };
-  }
-
-  // Fallback attempt (some clients omit content-type).
-  return await req.json().catch(() => null);
-}
-
 export async function POST(req: Request) {
-  const input = await readInput(req);
-  const parsed = bodySchema.safeParse(input);
+  const user = await getSessionUser();
+
+  if (!user) {
+    return NextResponse.json({ ok: false, requiresLogin: true });
+  }
+
+  const json = await req.json().catch(() => null);
+  const parsed = bodySchema.safeParse(json);
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: "Invalid input." }, { status: 400 });
   }
 
-  const user = await getSessionUser();
-  const { amount, firstName, lastName, email } = parsed.data;
-  const name = `${firstName} ${lastName}`.trim().slice(0, 120);
-  const note = parsed.data.note?.trim() || null;
-
-  const pool = dbPool();
-  const conn = await pool.getConnection();
+  const { amount, firstName, lastName, email, note } = parsed.data;
+  const name = `${firstName} ${lastName}`.trim();
 
   try {
-    // Security: never trust the client later for amount; it is stored in DB now.
-    const [res] = await conn.execute<ResultSetHeader>(
-      "INSERT INTO donations (user_id, name, email, note, amount, currency, status, created_at) VALUES (?, ?, ?, ?, ?, 'GHS', 'pending', NOW())",
-      [user?.id ?? null, name, email, note, amount],
-    );
+    const { data: newDonation, error: insertError } = await supabaseAdmin
+      .from("donations")
+      .insert({
+        user_id: user.id,
+        name,
+        email,
+        note: note || null,
+        amount,
+        currency: "GHS",
+        status: "pending",
+      })
+      .select("id")
+      .single();
 
-    const donationId = Number(res.insertId);
-    await setCheckoutDonationId(donationId);
+    if (insertError) throw insertError;
 
-    return NextResponse.json({ ok: true, donationId, requiresLogin: !user });
-  } catch {
+    await setCheckoutDonationId(newDonation.id);
+    return NextResponse.json({ ok: true });
+  } catch (err: any) {
+    console.error("[DONATION_INITIATE] Error:", {
+      message: err.message,
+      code: err.code,
+      details: err.details,
+      hint: err.hint,
+      fullError: JSON.stringify(err, null, 2),
+    });
+
     return NextResponse.json(
-      { ok: false, error: "We could not start your donation. Please try again." },
-      { status: 500 },
+      {
+        ok: false,
+        error: "Failed to start donation",
+        debug: process.env.NODE_ENV === "development" ? err.message : undefined,
+      },
+      { status: 500 }
     );
-  } finally {
-    conn.release();
   }
 }
-

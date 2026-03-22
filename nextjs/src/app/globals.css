@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+:root {
+  --background: #F7F6F3;
+  --foreground: #1F2937;
+
+  --pri: #2C3E50;
+  --sec: #8C6A4F;
+  --acc: #C9A66B;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--white-color, var(--background));
+  color: var(--text-color, var(--foreground));
+  font-family: var(--default-font, var(--font-sans), system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif);
+}
+
+/* Replace Font Awesome pseudo-elements with Unicode (no external font needed) */
+.main-menu ul li.submenu > a:after,
+.main-menu ul li.submenu > button:after {
+  content: "\25BC";
+  font-family: inherit;
+  font-size: 14px;
+  margin-left: 8px;
+}
+.slicknav_arrow:after {
+  content: "\25BC";
+  font-family: inherit;
+  font-size: 12px;
+}
+
+/* Utility helpers (Tailwind v4 still supports custom CSS) */
+.text-pri { color: var(--pri); }
+.text-sec { color: var(--sec); }
+.bg-pri { background: var(--pri); }
+.bg-sec { background: var(--sec); }
+.ring-sec { --tw-ring-color: color-mix(in oklab, var(--sec) 35%, transparent); }
