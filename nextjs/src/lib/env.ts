@@ -2,28 +2,21 @@ import { z } from "zod";
 
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+
   BASE_URL: z.string().url().optional(),
 
   NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(20),
 
-  SUPABASE_SERVICE_ROLE_KEY: z.string().min(20).refine(
-    (val) =>
-      // Allow new opaque format: sb_secret_...
-      val.startsWith("sb_secret_") ||
-      // OR allow legacy JWT format (still used in some older/self-hosted setups)
-      val.startsWith("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."),
-    {
-      message:
-        "SUPABASE_SERVICE_ROLE_KEY must start with 'sb_secret_' (new format) or 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' (legacy JWT)",
-    }
-  ),
+  SUPABASE_SERVICE_ROLE_KEY: z.string().min(20),
 
   PAYSTACK_PUBLIC_KEY: z.string().optional().default(""),
   PAYSTACK_SECRET_KEY: z.string().optional().default(""),
+
+  AUTH_SECRET: z.string().min(10),
 });
 
-export const env = envSchema.parse({
+const parsed = envSchema.safeParse({
   NODE_ENV: process.env.NODE_ENV,
   BASE_URL: process.env.BASE_URL,
 
@@ -33,4 +26,13 @@ export const env = envSchema.parse({
 
   PAYSTACK_PUBLIC_KEY: process.env.PAYSTACK_PUBLIC_KEY,
   PAYSTACK_SECRET_KEY: process.env.PAYSTACK_SECRET_KEY,
+
+  AUTH_SECRET: process.env.AUTH_SECRET,
 });
+
+if (!parsed.success) {
+  console.error("❌ ENV VALIDATION ERROR:", parsed.error.flatten().fieldErrors);
+  throw new Error("Invalid environment variables");
+}
+
+export const env = parsed.data;
