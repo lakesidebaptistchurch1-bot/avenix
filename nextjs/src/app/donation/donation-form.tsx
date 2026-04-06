@@ -1,45 +1,23 @@
 "use client";
-
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Alert } from "@/components/ui/Alert";
 
-/**
- * Client-side donation form.
- *
- * Why client-side:
- * - We need instant amount selection (preset buttons + custom amount).
- * - We want a smooth redirect into the payment flow.
- */
 const PRESETS = [100, 200, 300, 400, 500, 600] as const;
 
-type Props = {
-  prefill: {
-    firstName: string;
-    lastName: string;
-    email: string;
-  };
-};
-
-export function DonationForm({ prefill }: Props) {
-  const router = useRouter();
+export function DonationForm() {
   const [selectedPreset, setSelectedPreset] = useState<number>(PRESETS[0]);
-  const [customAmount, setCustomAmount] = useState<string>("");
+  const [customAmount, setCustomAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const resolvedAmount = useMemo(() => {
-    const raw = customAmount.trim();
-    if (!raw) return selectedPreset;
-
-    const n = Number(raw);
-    return Number.isFinite(n) && n > 0 ? n : NaN;
+    const n = Number(customAmount.trim());
+    return Number.isFinite(n) && n > 0 ? n : selectedPreset;
   }, [customAmount, selectedPreset]);
 
   async function onSubmit(formData: FormData) {
     setLoading(true);
     setError(null);
-
     const firstName = String(formData.get("firstName") ?? "").trim();
     const lastName = String(formData.get("lastName") ?? "").trim();
     const email = String(formData.get("email") ?? "").trim();
@@ -47,156 +25,154 @@ export function DonationForm({ prefill }: Props) {
 
     if (!firstName || !lastName || !email) {
       setLoading(false);
-      setError("First name, last name, and email are required.");
+      setError("Please provide your full name and email address.");
       return;
     }
 
-    if (!Number.isFinite(resolvedAmount) || resolvedAmount <= 0) {
+    if (resolvedAmount < 10) {
       setLoading(false);
-      setError("Please select or enter a valid donation amount.");
+      setError("Minimum donation amount is GH₵10.");
       return;
     }
 
-    const res = await fetch("/api/donations/initiate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount: resolvedAmount,
-        firstName,
-        lastName,
-        email,
-        note: note || undefined,
-      }),
-    });
+    try {
+      const initiateRes = await fetch("/api/donations/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: resolvedAmount,
+          firstName,
+          lastName,
+          email,
+          note: note || undefined,
+        }),
+      });
+      const initiateData = await initiateRes.json();
+      if (!initiateData.ok || !initiateData.donationId) {
+        throw new Error(initiateData.error || "Failed to start donation");
+      }
 
-    const data = (await res.json().catch(() => null)) as
-      | { ok?: boolean; error?: string; requiresLogin?: boolean }
-      | null;
+      const payRes = await fetch("/api/payments/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ donationId: initiateData.donationId }),
+      });
+      const payData = await payRes.json();
 
-    if (!res.ok || !data?.ok) {
+      if (!payData.ok || !payData.authorization_url) {
+        throw new Error(payData.error || "Payment initialization failed");
+      }
+      window.location.href = payData.authorization_url;
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
       setLoading(false);
-      setError(data?.error || "We could not start your donation. Please try again.");
-      return;
     }
-
-    const next = "/payment";
-    router.push(data.requiresLogin ? `/login?next=${encodeURIComponent(next)}` : next);
   }
 
   return (
-    <form action={onSubmit} className="">
-      {error ? <Alert kind="error">{error}</Alert> : null}
+    <form action={onSubmit} className="space-y-10">
+      {error && <Alert kind="error">{error}</Alert>}
 
-      <div>
-        <div className="text-xs font-bold uppercase tracking-wider text-slate-500">Select amount (GH₵)</div>
-
-        <div className="mt-3 grid grid-cols-3 gap-2">
-          {PRESETS.map((amt) => {
-            const active = !customAmount.trim() && selectedPreset === amt;
-            return (
-              <button
-                key={amt}
-                type="button"
-                onClick={() => {
-                  setSelectedPreset(amt);
-                  setCustomAmount("");
-                }}
-                className={[
-                  "rounded-2xl border px-3 py-3 text-sm font-extrabold transition",
-                  active
-                    ? "border-(--sec) bg-(--sec) text-white shadow-sm"
-                    : "border-slate-200 bg-slate-50 text-slate-800 hover:border-(--sec) hover:bg-white",
-                ].join(" ")}
-              >
-                GH₵ {amt}
-              </button>
-            );
-          })}
+      {/* Amount Selection */}
+      <div className="space-y-6">
+        <div className="flex items-baseline justify-between border-b border-brand-primary/10 pb-4">
+          <h2 className="text-sm font-bold uppercase tracking-widest text-brand-primary/60">Select Amount</h2>
+          <div className="flex items-baseline gap-1">
+            <span className="text-xs font-bold text-brand-secondary">GH₵</span>
+            <span className="text-5xl font-light text-brand-primary tracking-tighter">
+              {resolvedAmount.toLocaleString()}
+            </span>
+          </div>
         </div>
 
-        <label className=" block">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Other amount</span>
-          <div className="mt-2 flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 focus-within:border-(--sec) focus-within:bg-white focus-within:ring-4 focus-within:ring-[color-mix(in_oklab,var(--sec)_16%,transparent)]">
-            <span className="text-sm font-extrabold text-slate-500">GH₵</span>
-            <input
-              inputMode="decimal"
-              type="number"
-              min={1}
-              step="0.01"
-              value={customAmount}
-              onChange={(e) => setCustomAmount(e.target.value)}
-              placeholder="Enter amount"
-              className="w-full bg-transparent text-sm text-slate-900 outline-none"
-              aria-label="Custom donation amount"
-            />
+        <div className="grid grid-cols-3 gap-3">
+          {PRESETS.map((amt) => (
+            <button
+              key={amt}
+              type="button"
+              onClick={() => {
+                setSelectedPreset(amt);
+                setCustomAmount("");
+              }}
+              className={`py-4 rounded-xl font-medium transition-all duration-300 border ${
+                !customAmount && selectedPreset === amt
+                  ? "bg-brand-primary border-brand-primary text-white shadow-lg scale-[1.02]"
+                  : "bg-white border-neutral-200 text-brand-primary hover:border-brand-accent hover:bg-neutral-50"
+              }`}
+            >
+              GH₵{amt}
+            </button>
+          ))}
+        </div>
+
+        <div className="group relative">
+          <input
+            type="number"
+            inputMode="decimal"
+            value={customAmount}
+            onChange={(e) => setCustomAmount(e.target.value)}
+            placeholder="Other Amount"
+            className="w-full bg-white px-6 py-5 text-lg font-medium rounded-xl border border-neutral-200 focus:border-brand-accent focus:ring-0 outline-none transition-all placeholder:text-neutral-300"
+          />
+          <div className="absolute right-6 top-1/2 -translate-y-1/2 text-xs font-bold text-brand-accent tracking-widest uppercase pointer-events-none opacity-0 group-focus-within:opacity-100 transition-opacity">
+            Custom
           </div>
-          <p className="mt-2 text-xs text-slate-400">
-            You’ll be charged{" "}
-            <span className="font-bold text-slate-600">
-              {Number.isFinite(resolvedAmount) ? `GH₵ ${resolvedAmount.toFixed(2)}` : "—"}
-            </span>
-            .
-          </p>
-        </label>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-7 items-center md:grid-cols-2">
-        <label className="block">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">First name</span>
+      {/* Personal Info */}
+      <div className="space-y-6">
+        <h3 className="text-sm font-bold uppercase tracking-widest text-brand-primary/60 border-b border-brand-primary/10 pb-4">
+          Donor Details
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             name="firstName"
             type="text"
             required
-            defaultValue={prefill.firstName}
-            className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-(--sec) focus:bg-white focus:ring-4 focus:ring-[color-mix(in_oklab,var(--sec)_16%,transparent)]"
+            placeholder="First Name"
+            className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white/50 focus:bg-white focus:border-brand-accent outline-none transition-all"
           />
-        </label>
-
-        <label className="block">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Last name</span>
           <input
             name="lastName"
-            // type="text"
+            type="text"
             required
-            defaultValue={prefill.lastName}
-            className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-(--sec) focus:bg-white focus:ring-4 focus:ring-[color-mix(in_oklab,var(--sec)_16%,transparent)]"
+            placeholder="Last Name"
+            className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white/50 focus:bg-white focus:border-brand-accent outline-none transition-all"
           />
-        </label>
-      </div>
-
-      <label className="block mt-1">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Email address</span>
+        </div>
         <input
           name="email"
           type="email"
           required
-          defaultValue={prefill.email}
-          className="mt-2 w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-(--sec) focus:bg-white focus:ring-4 focus:ring-[color-mix(in_oklab,var(--sec)_16%,transparent)]"
+          placeholder="Email Address"
+          className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white/50 focus:bg-white focus:border-brand-accent outline-none transition-all"
         />
-      </label>
-
-      <label className="block mt-2">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Note (optional)</span>
         <textarea
           name="note"
-          rows={4}
-          placeholder="Add a note or dedication"
-          className="mt-2 w-full resize-none rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-(--sec) focus:bg-white focus:ring-4 focus:ring-[color-mix(in_oklab,var(--sec)_16%,transparent)]"
+          rows={2}
+          placeholder="Note or Dedication (Optional)"
+          className="w-full px-5 py-4 rounded-xl border border-neutral-200 bg-white/50 focus:bg-white focus:border-brand-accent resize-none outline-none transition-all"
         />
-      </label>
+      </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full rounded-2xl bg-[linear-gradient(135deg,var(--sec),#7b5a43)] px-4 py-3 mt-3 text-sm font-extrabold text-white shadow-sm transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
-      >
-        {loading ? "Starting checkout..." : "Continue to payment"}
-      </button>
-
-      <p className="text-center text-xs text-slate-400">
-        Secure, encrypted checkout. Your amount is locked on the server for safety.
-      </p>
+      <div className="space-y-4">
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-5 rounded-xl bg-brand-secondary hover:bg-brand-secondary-dark active:scale-[0.99] transition-all font-bold text-white shadow-xl shadow-brand-secondary/20 flex items-center justify-center gap-3 disabled:opacity-50"
+        >
+          {loading ? (
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+          ) : (
+            "Complete Secure Donation"
+          )}
+        </button>
+        <p className="text-center text-[10px] uppercase tracking-[0.2em] text-neutral-400">
+          Encrypted Secure Checkout • GH₵ Currency
+        </p>
+      </div>
     </form>
   );
 }
-

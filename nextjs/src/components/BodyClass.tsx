@@ -2,15 +2,19 @@
 
 import { useEffect } from "react";
 
-export function BodyClass(props: { className: string }) {
+interface BodyClassProps {
+  className: string;
+}
+
+export function BodyClass({ className }: BodyClassProps) {
   useEffect(() => {
-    const classes = props.className.split(/\s+/).filter(Boolean);
-    for (const c of classes) document.body.classList.add(c);
+    if (!className) return;
+    const classes = className.trim().split(/\s+/).filter(Boolean);
+    document.body.classList.add(...classes);
     return () => {
-      for (const c of classes) document.body.classList.remove(c);
+      document.body.classList.remove(...classes);
     };
-  }, [props.className]);
+  }, [className]);
 
   return null;
 }
-
