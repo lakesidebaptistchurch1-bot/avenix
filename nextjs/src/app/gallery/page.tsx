@@ -1,690 +1,203 @@
+"use client";
+
+import { useState, useMemo } from "react";
 import { BodyClass } from "@/components/BodyClass";
-import { Icon } from "@/components/Icon";
+import Link from "next/link";
+
+/* ─── Image data ─────────────────────────────────────────────────────────── */
+const IMAGES = [
+  { src: '/images/lol1 (2).jpg',      tag: 'Worship',     title: 'Sunday Celebration',   meta: 'Praise · Community',   size: 'tall' },
+  { src: '/images/lol1 (1).jpg',      tag: 'Faith',       title: 'Hearts In Unity',       meta: 'Congregation · Hope',  size: 'wide' },
+  { src: '/images/lol1 (4).jpg',      tag: 'Music',       title: 'Voices Of Hope',        meta: 'Choir · Harmony',      size: 'square' },
+  { src: '/images/lol1 (5).jpg',      tag: 'Prayer',      title: 'Moments Of Prayer',     meta: 'Reflection · Peace',   size: 'tall' },
+  { src: '/images/lol1 (6).jpg',      tag: 'Fellowship',  title: 'Family Fellowship',     meta: 'Community · Love',     size: 'wide' },
+  { src: '/images/lem.jpg',           tag: 'Outreach',    title: 'Serving Together',      meta: 'Service · Impact',     size: 'square' },
+  { src: '/images/Afia.jpg',          tag: 'Women',       title: 'Women Of Faith',        meta: 'Growth · Fellowship',  size: 'tall' },
+  { src: '/images/Josh.jpg',          tag: 'Youth',       title: 'Rising Generation',     meta: 'Ministry · Purpose',   size: 'square' },
+  { src: '/images/Paula.jpg',         tag: 'Events',      title: 'Community Moments',     meta: 'Connection · Joy',     size: 'wide' },
+  { src: '/images/Media.jpg',         tag: 'Media',       title: 'Media Ministry',        meta: 'Creative · Service',   size: 'square' },
+  { src: '/images/celebration.jpg',   tag: 'Celebration', title: 'Faith Celebrations',    meta: 'Joy · Worship',        size: 'tall' },
+  { src: '/images/Blessing.jpg',      tag: 'Worship',     title: 'Blessed Together',      meta: 'Gratitude · Prayer',   size: 'square' },
+  { src: '/images/choir.jpg',         tag: 'Music',       title: 'Choir Harmony',         meta: 'Music · Worship',      size: 'wide' },
+  { src: '/images/191.jpg',           tag: 'Faith',       title: 'Grace In Action',       meta: 'Faith · Impact',       size: 'square' },
+  { src: '/images/68.jpg',            tag: 'Fellowship',  title: 'Gathered In Love',      meta: 'Joy · Together',       size: 'tall' },
+  { src: '/images/211.jpg',           tag: 'Worship',     title: 'Sanctuary Praise',      meta: 'Spirit · Joy',         size: 'square' },
+  { src: '/images/192.jpg',           tag: 'Fellowship',  title: 'Warm Fellowship',       meta: 'Care · Unity',         size: 'wide' },
+  { src: '/images/Music.jpg',         tag: 'Music',       title: 'Praise Team',           meta: 'Worship · Sound',      size: 'tall' },
+  { src: '/images/pappoe.jpg',        tag: 'Events',      title: 'Leadership Moments',    meta: 'Vision · Guidance',    size: 'square' },
+  { src: '/images/69.jpg',            tag: 'Events',      title: 'Program Highlights',    meta: 'Events · Worship',     size: 'wide' },
+  { src: '/images/52.jpg',            tag: 'Fellowship',  title: 'Faithful Friends',      meta: 'Joy · Connection',     size: 'square' },
+  { src: '/images/27.jpg',            tag: 'Outreach',    title: 'Gathering Of Grace',    meta: 'Faith · Community',    size: 'tall' },
+  { src: '/images/dede mom.jpg',      tag: 'Celebration', title: 'Celebration Day',       meta: 'Joy · Fellowship',     size: 'wide' },
+  { src: '/images/share.jpg',         tag: 'Outreach',    title: 'Serving With Love',     meta: 'Care · Giving',        size: 'square' },
+  { src: '/images/congregation.JPG',  tag: 'Worship',     title: 'United In Worship',     meta: 'Praise · Together',    size: 'tall' },
+  { src: '/images/camera.JPG',        tag: 'Media',       title: 'Captured Moments',      meta: 'Story · Memory',       size: 'square' },
+  { src: '/images/ga.JPG',            tag: 'Outreach',    title: 'Outreach Love',         meta: 'Service · Hope',       size: 'wide' },
+  { src: '/images/girls.JPG',         tag: 'Youth',       title: 'Youth Fellowship',      meta: 'Growth · Joy',         size: 'square' },
+  { src: '/images/nabila.JPG',        tag: 'Fellowship',  title: 'Faithful Smiles',       meta: 'Care · Warmth',        size: 'tall' },
+  { src: '/images/umm.JPG',           tag: 'Faith',       title: 'Church Family',         meta: 'Love · Together',      size: 'square' },
+  { src: '/images/old.JPG',           tag: 'Faith',       title: 'Legacy Of Faith',       meta: 'Wisdom · Grace',       size: 'wide' },
+  { src: '/images/mimi.JPG',          tag: 'Worship',     title: 'Joyful Hearts',         meta: 'Worship · Joy',        size: 'square' },
+  { src: '/images/borga.JPG',         tag: 'Fellowship',  title: 'Together In Grace',     meta: 'Faith · Connection',   size: 'tall' },
+];
+
+const CATEGORIES = ['All', ...Array.from(new Set(IMAGES.map(i => i.tag))).sort()];
+
+const TAG_COLORS: Record<string, string> = {
+  Worship: '#C9A66B', Faith: '#2C3E50', Music: '#8C6A4F', Prayer: '#6B7280',
+  Fellowship: '#4B5563', Outreach: '#10B981', Women: '#D4A853', Youth: '#3B82F6',
+  Events: '#8B5CF6', Media: '#EC4899', Celebration: '#F59E0B',
+};
 
 export default function GalleryPage() {
+  const [active, setActive] = useState('All');
+  const filtered = useMemo(() => active === 'All' ? IMAGES : IMAGES.filter(i => i.tag === active), [active]);
+
   return (
     <>
       <BodyClass className="gallery-ui-pro" />
+      <GalleryStyles />
 
-      <div className="page-header">
-        <div className="container">
-          <div className="row align-items-center">
-            <div className="col-lg-12">
-              <div className="page-header-box">
-                <h1 className="text-anime-style-2" data-cursor="-opaque">
-                  Gallery
-                </h1>
-              </div>
-            </div>
-          </div>
+      {/* ── Hero with Requested Gradient ─────────────────────────────── */}
+      <section className="gl-hero bg-gradient-to-b from-[var(--color-brand-primary)]/75 via-[var(--color-brand-primary)]/55 to-[var(--color-brand-primary)]/85">
+        <div className="gl-hero-bg" aria-hidden="true">
+          <div className="gl-orb gl-orb-a opacity-20" />
+          <div className="gl-orb gl-orb-b opacity-10" />
         </div>
-      </div>
 
-      <section className="gallery-intro">
-        <div className="container">
-          <div className="gallery-hero">
-            <div className="gallery-hero-content">
-              <span className="gallery-eyebrow wow fadeInUp">Gallery</span>
-              <h2 className="wow fadeInUp">A Beautiful Story in Every Frame</h2>
-              <p className="wow fadeInUp" data-wow-delay="0.2s">
-                Discover worship, fellowship, and outreach through carefully captured moments. Each image reflects the
-                heart of our church family.
-              </p>
-              <div className="gallery-hero-stats wow fadeInUp" data-wow-delay="0.3s">
-                <div className="stat-item">
-                  <h3>150+</h3>
-                  <p>Moments captured</p>
-                </div>
-                <div className="stat-item">
-                  <h3>20+</h3>
-                  <p>Community programs</p>
-                </div>
-                <div className="stat-item">
-                  <h3>Weekly</h3>
-                  <p>New memories</p>
-                </div>
-              </div>
-              <div className="gallery-actions wow fadeInUp" data-wow-delay="0.4s">
-                <a href="/services" className="btn-default">
-                  Plan a Visit
-                </a>
-                <a href="/contact" className="btn-default btn-highlighted">
-                  Join Our Community
-                </a>
-              </div>
-            </div>
-
-            <div className="gallery-hero-media wow fadeInRight">
-              <div className="media-main">
-                <img src="/images/congregation.JPG" alt="" />
-                <div className="media-badge">
-                  <Icon name="star" />
-                  <span>Trusted by families</span>
-                </div>
-              </div>
-              <div className="media-stack">
-                <img src="/images/slide.jpg" alt="" />
-                <img src="/images/MR. LAWAL.JPG" alt="" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="gallery-featured">
-        <div className="container">
-          <div className="section-title text-center">
-            <h2 className="wow fadeInUp">Featured Moments</h2>
-            <p className="wow fadeInUp" data-wow-delay="0.2s">
-              Highlights from worship, outreach, and community life that make every week unforgettable.
+        <div className="gl-hero-inner">
+          <div className="gl-hero-text gl-anim-1">
+            <span className="gl-eyebrow text-brand-accent">✦ Our Collection ✦</span>
+            <h1 className="gl-hero-title text-white">
+              Moments of<br />
+              <em className="text-brand-accent italic font-normal">Faith & Grace</em>
+            </h1>
+            <p className="gl-hero-desc text-white/70">
+              Explore the visual journey of our church family. From powerful worship 
+              gatherings to quiet moments of prayer and joyful community service.
             </p>
-          </div>
 
-          <div className="featured-grid">
-            <article className="featured-card wow fadeInUp">
-              <figure className="featured-media">
-                <img src="/images/choir.jpg" alt="Choir leading worship" />
-              </figure>
-              <div className="featured-content">
-                <span className="featured-badge">Worship</span>
-                <h3>Choir Worship Night</h3>
-                <p>Powerful praise that lifted hearts and united the congregation.</p>
-                <div className="featured-meta">
-                  <span>Music Ministry</span>
-                  <span>•</span>
-                  <span>Sunday Service</span>
-                </div>
-              </div>
-            </article>
+            <div className="gl-stats">
+              <div className="gl-stat"><strong className="text-white">150+</strong><span className="text-white/50">Moments</span></div>
+              <div className="gl-stat"><strong className="text-white">20+</strong><span className="text-white/50">Ministries</span></div>
+            </div>
 
-            <article className="featured-card wow fadeInUp" data-wow-delay="0.1s">
-              <figure className="featured-media">
-                <img src="/images/share.jpg" alt="Community outreach" />
-              </figure>
-              <div className="featured-content">
-                <span className="featured-badge">Outreach</span>
-                <h3>Community Outreach</h3>
-                <p>Serving with compassion, meeting needs, and sharing hope.</p>
-                <div className="featured-meta">
-                  <span>Community Care</span>
-                  <span>•</span>
-                  <span>Local Impact</span>
-                </div>
-              </div>
-            </article>
-
-            <article className="featured-card wow fadeInUp" data-wow-delay="0.2s">
-              <figure className="featured-media">
-                <img src="/images/celebration.jpg" alt="Celebration service" />
-              </figure>
-              <div className="featured-content">
-                <span className="featured-badge">Celebration</span>
-                <h3>Faith Celebration</h3>
-                <p>A joyful gathering celebrating milestones and answered prayers.</p>
-                <div className="featured-meta">
-                  <span>Special Service</span>
-                  <span>•</span>
-                  <span>Church Family</span>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section className="page-gallery gallery-showcase">
-        <div className="container">
-          <div className="gallery-masonry gallery-items">
-            <a
-              className="masonry-card size-lg wow fadeInUp"
-              data-cursor-text="View"
-              href="/images/lol1 (2).jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/lol1 (2).jpg" alt="Worship celebration" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Worship</span>
-                <span className="gallery-title">Sunday Celebration</span>
-                <span className="gallery-meta">Praise • Community</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="0.1s"
-              data-cursor-text="View"
-              href="/images/lol1 (1).jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/lol1 (1).jpg" alt="Congregation worship" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Faith</span>
-                <span className="gallery-title">Hearts In Unity</span>
-                <span className="gallery-meta">Congregation • Hope</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="0.2s"
-              data-cursor-text="View"
-              href="/images/lol1 (4).jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/lol1 (4).jpg" alt="Choir performance" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Music</span>
-                <span className="gallery-title">Voices Of Hope</span>
-                <span className="gallery-meta">Choir • Harmony</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="0.3s"
-              data-cursor-text="View"
-              href="/images/lol1 (5).jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/lol1 (5).jpg" alt="Prayer moment" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Prayer</span>
-                <span className="gallery-title">Moments Of Prayer</span>
-                <span className="gallery-meta">Reflection • Peace</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-lg wow fadeInUp"
-              data-wow-delay="0.4s"
-              data-cursor-text="View"
-              href="/images/lol1 (6).jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/lol1 (6).jpg" alt="Church fellowship" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Fellowship</span>
-                <span className="gallery-title">Family Fellowship</span>
-                <span className="gallery-meta">Community • Love</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="0.5s"
-              data-cursor-text="View"
-              href="/images/lem.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/lem.jpg" alt="Outreach team" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Outreach</span>
-                <span className="gallery-title">Serving Together</span>
-                <span className="gallery-meta">Service • Impact</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="0.6s"
-              data-cursor-text="View"
-              href="/images/Afia.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/Afia.jpg" alt="Women fellowship" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Women</span>
-                <span className="gallery-title">Women Of Faith</span>
-                <span className="gallery-meta">Growth • Fellowship</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="0.7s"
-              data-cursor-text="View"
-              href="/images/Josh.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/Josh.jpg" alt="Youth ministry" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Youth</span>
-                <span className="gallery-title">Rising Generation</span>
-                <span className="gallery-meta">Ministry • Purpose</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="0.8s"
-              data-cursor-text="View"
-              href="/images/Paula.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/Paula.jpg" alt="Community event" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Events</span>
-                <span className="gallery-title">Community Moments</span>
-                <span className="gallery-meta">Connection • Joy</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="0.9s"
-              data-cursor-text="View"
-              href="/images/Media.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/Media.jpg" alt="Media team" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Media</span>
-                <span className="gallery-title">Media Ministry</span>
-                <span className="gallery-meta">Creative • Service</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="1s"
-              data-cursor-text="View"
-              href="/images/celebration.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/celebration.jpg" alt="Celebration service" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Celebration</span>
-                <span className="gallery-title">Faith Celebrations</span>
-                <span className="gallery-meta">Joy • Worship</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="1.1s"
-              data-cursor-text="View"
-              href="/images/Blessing.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/Blessing.jpg" alt="Blessing moment" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Blessing</span>
-                <span className="gallery-title">Blessed Together</span>
-                <span className="gallery-meta">Gratitude • Prayer</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-lg wow fadeInUp"
-              data-wow-delay="1.2s"
-              data-cursor-text="View"
-              href="/images/choir.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/choir.jpg" alt="Choir worship" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Choir</span>
-                <span className="gallery-title">Choir Harmony</span>
-                <span className="gallery-meta">Music • Worship</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="1.3s"
-              data-cursor-text="View"
-              href="/images/191.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/191.jpg" alt="Church service" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Service</span>
-                <span className="gallery-title">Grace In Action</span>
-                <span className="gallery-meta">Faith • Impact</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="1.4s"
-              data-cursor-text="View"
-              href="/images/68.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/68.jpg" alt="Community gathering" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Community</span>
-                <span className="gallery-title">Gathered In Love</span>
-                <span className="gallery-meta">Joy • Together</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="1.5s"
-              data-cursor-text="View"
-              href="/images/211.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/211.jpg" alt="Worship service" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Worship</span>
-                <span className="gallery-title">Sanctuary Praise</span>
-                <span className="gallery-meta">Spirit • Joy</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="1.6s"
-              data-cursor-text="View"
-              href="/images/192.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/192.jpg" alt="Fellowship moment" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Fellowship</span>
-                <span className="gallery-title">Warm Fellowship</span>
-                <span className="gallery-meta">Care • Unity</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-lg wow fadeInUp"
-              data-wow-delay="1.7s"
-              data-cursor-text="View"
-              href="/images/Music.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/Music.jpg" alt="Praise team" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Music</span>
-                <span className="gallery-title">Praise Team</span>
-                <span className="gallery-meta">Worship • Sound</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="1.8s"
-              data-cursor-text="View"
-              href="/images/pappoe.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/pappoe.jpg" alt="Leadership gathering" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Leadership</span>
-                <span className="gallery-title">Leadership Moments</span>
-                <span className="gallery-meta">Vision • Guidance</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="1.9s"
-              data-cursor-text="View"
-              href="/images/69.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/69.jpg" alt="Church program" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Program</span>
-                <span className="gallery-title">Program Highlights</span>
-                <span className="gallery-meta">Events • Worship</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="2s"
-              data-cursor-text="View"
-              href="/images/52.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/52.jpg" alt="Fellowship event" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Fellowship</span>
-                <span className="gallery-title">Faithful Friends</span>
-                <span className="gallery-meta">Joy • Connection</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="2.1s"
-              data-cursor-text="View"
-              href="/images/27.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/27.jpg" alt="Church gathering" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Gathering</span>
-                <span className="gallery-title">Gathering Of Grace</span>
-                <span className="gallery-meta">Faith • Community</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-lg wow fadeInUp"
-              data-wow-delay="2.2s"
-              data-cursor-text="View"
-              href="/images/dede mom.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/dede mom.jpg" alt="Celebration gathering" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Celebration</span>
-                <span className="gallery-title">Celebration Day</span>
-                <span className="gallery-meta">Joy • Fellowship</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="2.3s"
-              data-cursor-text="View"
-              href="/images/share.jpg"
-            >
-              <figure className="masonry-media">
-                <img src="/images/share.jpg" alt="Community sharing" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Outreach</span>
-                <span className="gallery-title">Serving With Love</span>
-                <span className="gallery-meta">Care • Giving</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="2.4s"
-              data-cursor-text="View"
-              href="/images/congregation.JPG"
-            >
-              <figure className="masonry-media">
-                <img src="/images/congregation.JPG" alt="Congregation worship" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Worship</span>
-                <span className="gallery-title">United In Worship</span>
-                <span className="gallery-meta">Praise • Together</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="2.5s"
-              data-cursor-text="View"
-              href="/images/camera.JPG"
-            >
-              <figure className="masonry-media">
-                <img src="/images/camera.JPG" alt="Media coverage" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Media</span>
-                <span className="gallery-title">Captured Moments</span>
-                <span className="gallery-meta">Story • Memory</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="2.6s"
-              data-cursor-text="View"
-              href="/images/ga.JPG"
-            >
-              <figure className="masonry-media">
-                <img src="/images/ga.JPG" alt="Community outreach" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Outreach</span>
-                <span className="gallery-title">Outreach Love</span>
-                <span className="gallery-meta">Service • Hope</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="2.7s"
-              data-cursor-text="View"
-              href="/images/girls.JPG"
-            >
-              <figure className="masonry-media">
-                <img src="/images/girls.JPG" alt="Youth group" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Youth</span>
-                <span className="gallery-title">Youth Fellowship</span>
-                <span className="gallery-meta">Growth • Joy</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="2.8s"
-              data-cursor-text="View"
-              href="/images/nabila.JPG"
-            >
-              <figure className="masonry-media">
-                <img src="/images/nabila.JPG" alt="Community member" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Community</span>
-                <span className="gallery-title">Faithful Smiles</span>
-                <span className="gallery-meta">Care • Warmth</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="2.9s"
-              data-cursor-text="View"
-              href="/images/umm.JPG"
-            >
-              <figure className="masonry-media">
-                <img src="/images/umm.JPG" alt="Church family" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Family</span>
-                <span className="gallery-title">Church Family</span>
-                <span className="gallery-meta">Love • Together</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-lg wow fadeInUp"
-              data-wow-delay="3s"
-              data-cursor-text="View"
-              href="/images/old.JPG"
-            >
-              <figure className="masonry-media">
-                <img src="/images/old.JPG" alt="Senior members" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Heritage</span>
-                <span className="gallery-title">Legacy Of Faith</span>
-                <span className="gallery-meta">Wisdom • Grace</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-sm wow fadeInUp"
-              data-wow-delay="3.1s"
-              data-cursor-text="View"
-              href="/images/mimi.JPG"
-            >
-              <figure className="masonry-media">
-                <img src="/images/mimi.JPG" alt="Worship smiles" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Joy</span>
-                <span className="gallery-title">Joyful Hearts</span>
-                <span className="gallery-meta">Worship • Joy</span>
-              </span>
-            </a>
-
-            <a
-              className="masonry-card size-md wow fadeInUp"
-              data-wow-delay="3.2s"
-              data-cursor-text="View"
-              href="/images/borga.JPG"
-            >
-              <figure className="masonry-media">
-                <img src="/images/borga.JPG" alt="Community gathering" />
-              </figure>
-              <span className="masonry-overlay">
-                <span className="gallery-tag">Community</span>
-                <span className="gallery-title">Together In Grace</span>
-                <span className="gallery-meta">Faith • Connection</span>
-              </span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="gallery-cta">
-        <div className="container">
-          <div className="gallery-cta-content wow fadeInUp">
-            <h2>Be Part of the Story</h2>
-            <p>
-              Every photo represents a moment of faith, love, and connection. Come worship with us, join a ministry
-              team, or attend an event to create the next memory together.
-            </p>
-            <div className="gallery-cta-actions">
-              <a href="/services" className="btn-default">
-                View Service Times
-              </a>
-              <a href="/contact" className="btn-default btn-highlighted">
-                Get Involved
-              </a>
+            <div className="gl-hero-actions">
+              <Link href="/contact" className="gl-btn bg-brand-accent text-brand-primary hover:bg-white hover:text-brand-primary transition-all shadow-lg">
+                Be Part of the Story
+              </Link>
+              <Link href="#collection" className="gl-btn border border-white/20 text-white hover:bg-white/10 transition-all">
+                Browse All
+              </Link>
             </div>
           </div>
+
+          <div className="gl-hero-mosaic gl-anim-2">
+            <div className="gl-mosaic-main">
+              <img src="/images/congregation.JPG" alt="Worship" />
+            </div>
+            <div className="gl-mosaic-stack">
+              <div className="gl-mosaic-sm"><img src="/images/choir.jpg" alt="Choir" /></div>
+              <div className="gl-mosaic-sm"><img src="/images/celebration.jpg" alt="Celebration" /></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Collection ───────────────────────────────────────────────── */}
+      <section id="collection" className="gl-masonry-section bg-site-bg">
+        <div className="gl-section-head">
+          <span className="gl-eyebrow text-brand-secondary">The Archive</span>
+          <h2 className="text-brand-primary font-serif">Full Gallery</h2>
+        </div>
+
+        <div className="gl-filters">
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setActive(cat)}
+              className={`gl-filter-chip${active === cat ? ' gl-filter-active bg-brand-primary text-white border-brand-primary' : ' bg-white text-site-muted border-gray-200'}`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <div className="gl-masonry" key={active}>
+          {filtered.map((img, i) => (
+            <div key={`${img.src}-${i}`} className={`gl-card gl-card-${img.size} shadow-sm hover:shadow-xl transition-all duration-500`}>
+              <figure className="gl-card-fig">
+                <img src={img.src} alt={img.title} loading="lazy" />
+              </figure>
+              <div className="gl-card-overlay">
+                <span className="gl-card-tag" style={{ background: `${TAG_COLORS[img.tag]}22`, color: TAG_COLORS[img.tag] }}>{img.tag}</span>
+                <h3 className="gl-card-title text-white">{img.title}</h3>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
     </>
   );
 }
 
+function GalleryStyles() {
+  return (
+    <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:wght@400;500;700&display=swap');
+
+      .gl-hero, .gl-masonry-section {
+        --pri: #2C3E50;
+        --sec: #8C6A4F;
+        --acc: #C9A66B;
+        --bg:  #F7F6F3;
+        font-family: 'DM Sans', sans-serif;
+      }
+
+      .gl-hero { position: relative; padding: 120px 24px; overflow: hidden; }
+      .gl-hero-bg { position: absolute; inset: 0; pointer-events: none; }
+      .gl-orb { position: absolute; border-radius: 50%; filter: blur(120px); }
+      .gl-orb-a { width: 500px; height: 500px; top: -150px; left: -100px; background: var(--acc); }
+      .gl-orb-b { width: 400px; height: 400px; bottom: -100px; right: -50px; background: white; }
+
+      .gl-hero-inner { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+      @media(max-width: 900px) { .gl-hero-inner { grid-template-columns: 1fr; } }
+
+      .gl-hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 5vw, 4.5rem); font-weight: 700; line-height: 1.1; margin: 1rem 0; }
+      .gl-hero-desc { font-size: 1.1rem; line-height: 1.7; max-width: 480px; margin-bottom: 2rem; }
+      
+      .gl-eyebrow { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.25em; text-transform: uppercase; }
+      .gl-stats { display: flex; gap: 40px; margin-bottom: 40px; }
+      .gl-stat strong { display: block; font-size: 2.2rem; font-family: 'Cormorant Garamond', serif; line-height: 1; }
+      .gl-stat span { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+      .gl-btn { padding: 16px 36px; border-radius: 50px; font-weight: 700; text-decoration: none; font-size: 0.85rem; display: inline-block; }
+
+      .gl-hero-mosaic { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; }
+      .gl-mosaic-main { aspect-ratio: 4/5; border-radius: 32px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+      .gl-mosaic-main img, .gl-mosaic-sm img { width: 100%; height: 100%; object-fit: cover; }
+      .gl-mosaic-stack { display: flex; flex-direction: column; gap: 16px; }
+      .gl-mosaic-sm { aspect-ratio: 1/1; border-radius: 20px; overflow: hidden; box-shadow: 0 15px 30px -10px rgba(0,0,0,0.4); }
+
+      .gl-masonry-section { padding: 100px 24px; max-width: 1300px; margin: 0 auto; }
+      .gl-section-head { text-align: center; margin-bottom: 50px; }
+      .gl-section-head h2 { font-size: 3.5rem; font-weight: 700; margin-top: 10px; }
+
+      .gl-filters { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 60px; }
+      .gl-filter-chip { padding: 10px 24px; border: 1px solid; border-radius: 50px; cursor: pointer; transition: all 0.4s ease; font-weight: 600; font-size: 0.9rem; }
+
+      .gl-masonry { columns: 4 250px; column-gap: 24px; }
+      .gl-card { break-inside: avoid; margin-bottom: 24px; border-radius: 24px; overflow: hidden; position: relative; cursor: pointer; }
+      .gl-card img { width: 100%; display: block; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+      .gl-card:hover img { transform: scale(1.1); }
+      .gl-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85), transparent 70%); padding: 24px; display: flex; flex-direction: column; justify-content: flex-end; opacity: 0; transition: all 0.4s ease; }
+      .gl-card:hover .gl-card-overlay { opacity: 1; }
+      .gl-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 600; }
+      .gl-card-tag { font-size: 0.6rem; text-transform: uppercase; font-weight: 800; padding: 5px 12px; border-radius: 6px; align-self: flex-start; margin-bottom: 10px; letter-spacing: 0.1em; }
+      
+      @keyframes gl-fade-up { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+      .gl-anim-1 { animation: gl-fade-up 1s ease forwards; }
+      .gl-anim-2 { animation: gl-fade-up 1s ease 0.2s forwards; opacity: 0; }
+    `}</style>
+  );
+}

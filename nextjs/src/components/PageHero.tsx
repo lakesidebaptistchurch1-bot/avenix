@@ -1,52 +1,82 @@
-import Image from "next/image";
+"use client";
 
-/**
- * A reusable hero/header section for content pages (About/Services/Contact).
- *
- * This keeps page files small and makes it easy to keep typography and spacing consistent
- * across different routes and screen sizes.
- */
-type Props = {
+import Image from "next/image";
+import { motion } from "framer-motion";
+
+interface PageHeroProps {
+  eyebrow?: string;
   title: string;
   subtitle?: string;
-  /** Optional small label shown above the title. */
-  eyebrow?: string;
-  /** Background image placed behind the gradient overlay. */
-  imageSrc?: string;
-};
+  imageSrc: string;
+}
 
-export function PageHero({ title, subtitle, eyebrow, imageSrc }: Props) {
+export function PageHero({ eyebrow, title, subtitle, imageSrc }: PageHeroProps) {
   return (
-    <section className="relative overflow-hidden border-b border-black/10">
-      {/* Background image (optional) */}
-      {imageSrc ? (
+    <section className="relative h-[85vh] min-h-[620px] w-full flex items-center justify-center overflow-hidden">
+      {/* Background Image with gentle continuous zoom */}
+      <motion.div
+        initial={{ scale: 1.08 }}
+        animate={{ scale: 1.02 }}
+        transition={{
+          duration: 18,
+          ease: "linear",
+          repeat: Infinity,
+          repeatType: "reverse",
+        }}
+        className="absolute inset-0 z-0"
+      >
         <Image
           src={imageSrc}
-          alt=""
+          alt="Church worship atmosphere"
           fill
           priority
-          sizes="100vw"
           className="object-cover"
-          aria-hidden="true"
         />
-      ) : null}
+        {/* Strong gradient overlay for excellent text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/50 to-black/80" />
+      </motion.div>
 
-      {/* Overlay for readability */}
-      <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(44,62,80,0.92),rgba(44,62,80,0.62))]" />
-      <div className="absolute inset-0 bg-[radial-gradient(700px_220px_at_85%_15%,rgba(201,166,107,0.18),transparent_60%)]" />
-
-      <div className="relative mx-auto max-w-6xl px-4 py-16 md:py-20">
-        {eyebrow ? (
-          <div className="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-extrabold uppercase tracking-wider text-white/85">
+      <div className="relative z-10 w-full max-w-5xl px-6 text-center">
+        {eyebrow && (
+          <motion.span
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="inline-block text-brand-accent font-bold tracking-[0.25em] uppercase text-sm mb-6"
+          >
             {eyebrow}
-          </div>
-        ) : null}
-        <h1 className="mt-6 text-4xl font-extrabold tracking-tight text-white md:text-5xl">{title}</h1>
-        {subtitle ? (
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-white/75 md:text-base">{subtitle}</p>
-        ) : null}
+          </motion.span>
+        )}
+
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.15 }}
+          className="text-5xl md:text-7xl lg:text-[5.2rem] font-serif font-black text-white leading-[1.05] mb-8 drop-shadow-sm"
+        >
+          {title}
+        </motion.h1>
+
+        {subtitle && (
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="text-lg md:text-xl text-neutral-100 max-w-2xl mx-auto font-light leading-relaxed mb-12"
+          >
+            {subtitle}
+          </motion.p>
+        )}
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="flex justify-center"
+        >
+        </motion.div>
       </div>
     </section>
   );
 }
-

@@ -1,19 +1,22 @@
-// ... other imports
 import { redirect } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase";
 import { getSessionUser } from "@/lib/auth/session";
-import { getCheckoutDonationId, clearCheckoutDonationId } from "@/lib/checkout";
+import {
+  getCheckoutDonationId,
+  clearCheckoutDonationId,
+} from "@/lib/checkout";
 import { env } from "@/lib/env";
 import { PaymentClient } from "./payment-client";
-// PaymentClient component import ...
 
 export default async function PaymentPage() {
   const user = await getSessionUser();
+
   if (!user) {
     redirect(`/login?next=${encodeURIComponent("/payment")}`);
   }
 
   const donationId = await getCheckoutDonationId();
+
   if (!donationId) {
     redirect("/donation");
   }
@@ -25,14 +28,14 @@ export default async function PaymentPage() {
     .single();
 
   if (error || !donation) {
-    console.error("Donation fetch error:", error);
     await clearCheckoutDonationId();
     redirect("/donation");
   }
 
   if (
     donation.status !== "pending" ||
-    (donation.user_id && Number(donation.user_id) !== user.id)
+    (donation.user_id &&
+      Number(donation.user_id) !== Number(user.id))
   ) {
     await clearCheckoutDonationId();
     redirect("/donation");

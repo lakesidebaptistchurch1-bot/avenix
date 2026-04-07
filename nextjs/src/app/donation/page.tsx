@@ -1,48 +1,63 @@
 import { BodyClass } from "@/components/BodyClass";
-import { getSessionUser } from "@/lib/auth/session";
-import { redirect } from "next/navigation";
 import { DonationForm } from "./donation-form";
 
-/**
- * Donation start page.
- *
- * Legacy equivalent: `lbc_project/donation.php`
- */
-export default async function DonationPage() {
-  const user = await getSessionUser();
-  if (!user) {
-    redirect(`/signup?next=${encodeURIComponent("/donation")}`);
-  }
-  const fullName = user?.name ?? "";
-  const parts = fullName.split(/\s+/).filter(Boolean);
-  const firstName = parts[0] ?? "";
-  const lastName = parts.slice(1).join(" ");
-
+export default function DonationPage() {
   return (
     <>
       <BodyClass className="donation-page-ui" />
+      <style>{`
+        .dp-card-glass {
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .text-shimmer {
+          background: linear-gradient(to right, #C9A66B 20%, #F0D69F 50%, #C9A66B 80%);
+          background-size: 200% auto;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          animation: shimmer 4s linear infinite;
+        }
+        @keyframes shimmer { to { background-position: 200% center; } }
+      `}</style>
 
-      <main id="donate-section" className="flex min-h-dvh items-center justify-center overflow-hidden bg-[#f7f7f8] px-4 py-10 sm:px-6 lg:px-8">
-        <section className="w-full max-w-2xl">
-          <div className="mx-auto w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_10px_30px_rgba(15,23,42,0.06)] sm:p-8">
-            <header className="text-center md:text-left">
-              <h1 className="text-2xl font-extrabold tracking-tight text-slate-800 sm:text-3xl">Make a donation</h1>
-              <p className="mt-2 text-sm leading-6 text-slate-600">Fill in your details and continue to payment.</p>
-            </header>
+      <main className="min-h-dvh relative overflow-hidden flex items-center justify-center py-16 px-4" 
+            style={{ background: '#0F172A' }}>
+        
+        {/* Massive Background Aurora Elements */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute -top-1/4 -left-1/4 w-[80%] h-[80%] bg-brand-primary/20 blur-[120px] rounded-full animate-pulse" />
+          <div className="absolute -bottom-1/4 -right-1/4 w-[60%] h-[60%] bg-brand-secondary/10 blur-[100px] rounded-full" />
+        </div>
 
-            <div className="mt-6">
-              <DonationForm
-                prefill={{
-                  firstName,
-                  lastName,
-                  email: user?.email ?? "",
-                }}
-              />
+        <div className="relative z-10 w-full max-w-[540px]">
+          {/* Minimalist Header */}
+          <div className="text-center mb-12 space-y-3">
+            <span className="text-[10px] font-bold tracking-[0.4em] text-brand-accent uppercase">
+              Impact the Future
+            </span>
+            <h1 className="text-5xl md:text-6xl font-light tracking-tight text-white">
+              Support our <span className="text-shimmer italic font-serif">Mission</span>
+            </h1>
+            <p className="text-slate-400 text-sm max-w-xs mx-auto font-light leading-relaxed">
+              Join us in creating lasting change through your generous contribution.
+            </p>
+          </div>
+
+          {/* Massive Simple Card */}
+          <div className="dp-card-glass rounded-[2.5rem] shadow-2xl p-8 md:p-12 transition-all">
+            <DonationForm />
+          </div>
+
+          {/* Footer Branding */}
+          <div className="mt-12 flex flex-col items-center gap-6">
+            <div className="flex items-center gap-8 opacity-40 grayscale contrast-125">
+              <span className="text-[10px] font-bold text-white tracking-widest uppercase">Paystack Secure</span>
+              <span className="text-[10px] font-bold text-white tracking-widest uppercase">Verified Merchant</span>
             </div>
           </div>
-        </section>
+        </div>
       </main>
     </>
   );
 }
-
