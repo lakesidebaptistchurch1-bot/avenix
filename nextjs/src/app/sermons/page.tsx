@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 
 /* ── useInView (fully typed, tuple return) ───────────────────── */
-function useInView(threshold = 0.12): [React.RefObject<HTMLElement>, boolean] {
-  const ref = useRef<HTMLElement>(null);
+function useInView(threshold = 0.12): [React.RefObject<HTMLElement | null>, boolean] {
+  const ref = useRef<HTMLElement | null>(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -34,21 +34,48 @@ const PlayIcon = () => (
 );
 
 const ArrowIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <line x1="5" y1="12" x2="19" y2="12" />
     <polyline points="12,5 19,12 12,19" />
   </svg>
 );
 
 const UserIcon = () => (
-  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="11"
+    height="11"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <circle cx="12" cy="8" r="4" />
     <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
   </svg>
 );
 
 const CalIcon = () => (
-  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="11"
+    height="11"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <rect x="3" y="4" width="18" height="18" rx="2" />
     <line x1="16" y1="2" x2="16" y2="6" />
     <line x1="8" y1="2" x2="8" y2="6" />
@@ -92,7 +119,7 @@ const sermons = [
 
 type Sermon = (typeof sermons)[0];
 
-/* ── Sermon Card (inline styles for colors, Tailwind for layout) ── */
+/* ── Sermon Card ─────────────────────────────────────────────── */
 function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -115,7 +142,6 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
     return () => obs.disconnect();
   }, []);
 
-  // Use CSS variables for colors and shadows
   const cardStyle = {
     backgroundColor: "var(--color-site-surface)",
     borderRadius: "1rem",
@@ -153,7 +179,6 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
             opacity: 0.65,
           }}
         />
-
         {/* Date badge */}
         <div
           className="absolute top-3 left-3 rounded-xl px-2.5 py-1.5 text-center leading-none shadow-md"
@@ -169,7 +194,6 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
             {sermon.month}
           </span>
         </div>
-
         {/* Play button */}
         <a
           href="/sermons-single"
@@ -179,7 +203,6 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
         >
           <PlayIcon />
         </a>
-
         {/* Category chip */}
         <span
           className="absolute bottom-3 left-3 text-white text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full backdrop-blur-sm"
@@ -197,7 +220,6 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
         >
           {sermon.title}
         </h2>
-
         <div className="flex flex-col gap-1.5 mb-4">
           <div className="flex items-center gap-2 text-xs" style={{ color: "var(--color-site-muted, #6B7280)" }}>
             <UserIcon />
@@ -208,7 +230,6 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
             <span>{sermon.time}</span>
           </div>
         </div>
-
         <a
           href="/sermons-single"
           className="mt-auto inline-flex items-center gap-1.5 text-xs font-bold tracking-widest uppercase transition-all duration-200 hover:gap-2"
@@ -223,7 +244,7 @@ function SermonCard({ sermon, index }: { sermon: Sermon; index: number }) {
   );
 }
 
-/* ── Pagination (clean, responsive) ───────────────────────────── */
+/* ── Pagination ─────────────────────────────────────────────── */
 function Pagination() {
   const [active, setActive] = useState(1);
   const items: (number | string)[] = ["‹", 1, 2, 3, "›"];
@@ -248,7 +269,7 @@ function Pagination() {
   );
 }
 
-/* ── Main Page ────────────────────────────────────────────────── */
+/* ── Main Page ──────────────────────────────────────────────── */
 export default function SermonsPage() {
   const [sectionRef, sectionVisible] = useInView(0.05);
 
@@ -272,7 +293,6 @@ export default function SermonsPage() {
             className="absolute top-[-100px] right-[-60px] w-[400px] h-[400px] rounded-full pointer-events-none"
             style={{ background: "radial-gradient(circle, rgba(201,166,107,0.12) 0%, transparent 70%)" }}
           />
-
           <div className="relative z-10 max-w-xl mx-auto text-center">
             <p
               className="text-[11px] tracking-[0.35em] uppercase font-bold mb-4"
@@ -286,7 +306,8 @@ export default function SermonsPage() {
             >
               Words that{" "}
               <em className="italic" style={{ color: "var(--color-brand-accent, #C9A66B)" }}>move</em>
-              <br />the heart
+              <br />
+              the heart
             </h1>
             <p
               className="text-white/55 text-sm leading-relaxed mb-7"
@@ -294,17 +315,11 @@ export default function SermonsPage() {
             >
               Powerful messages that build your faith and encourage your walk with God.
             </p>
-            <div
-              className="flex gap-3 justify-center flex-wrap"
-              style={{ animation: "fadeUp 0.7s ease 0.44s both" }}
-            >
+            <div className="flex gap-3 justify-center flex-wrap" style={{ animation: "fadeUp 0.7s ease 0.44s both" }}>
               <a
                 href="/sermons-single"
                 className="inline-flex items-center gap-2 text-sm font-bold px-6 py-3 rounded-full shadow-md transition-all hover:shadow-brand"
-                style={{
-                  backgroundColor: "var(--color-brand-accent, #C9A66B)",
-                  color: "var(--color-brand-primary, #2C3E50)",
-                }}
+                style={{ backgroundColor: "var(--color-brand-accent, #C9A66B)", color: "var(--color-brand-primary, #2C3E50)" }}
               >
                 <PlayIcon /> Watch Latest
               </a>
@@ -346,16 +361,10 @@ export default function SermonsPage() {
               transition: "opacity 0.6s ease, transform 0.6s ease",
             }}
           >
-            <p
-              className="text-[11px] tracking-[0.25em] uppercase font-bold mb-1"
-              style={{ color: "var(--color-brand-secondary, #8C6A4F)" }}
-            >
+            <p className="text-[11px] tracking-[0.25em] uppercase font-bold mb-1" style={{ color: "var(--color-brand-secondary, #8C6A4F)" }}>
               Recent Sermons
             </p>
-            <h2
-              className="font-serif text-3xl font-black tracking-tight"
-              style={{ color: "var(--color-brand-primary, #2C3E50)" }}
-            >
+            <h2 className="font-serif text-3xl font-black tracking-tight" style={{ color: "var(--color-brand-primary, #2C3E50)" }}>
               Every word is{" "}
               <em className="italic not-italic font-black" style={{ color: "var(--color-brand-secondary, #8C6A4F)" }}>
                 a seed planted
@@ -363,7 +372,7 @@ export default function SermonsPage() {
             </h2>
           </div>
 
-          {/* Responsive grid: 1 column mobile, 2 tablet, 3 desktop */}
+          {/* Responsive grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {sermons.map((s, i) => (
               <SermonCard key={s.id} sermon={s} index={i} />

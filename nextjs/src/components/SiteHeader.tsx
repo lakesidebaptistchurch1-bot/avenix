@@ -142,9 +142,9 @@ export function SiteHeader() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[100] flex flex-col bg-brand-primary p-8 lg:hidden"
+            className="fixed inset-0 z-[100] flex flex-col  bg-brand-primary p-8 lg:hidden"
           >
-            <div className="mt-20 flex flex-col gap-6">
+            <div className="mt-20 flex flex-col items-center gap-6">
               {[...mainNavItems, ...pagesDropdownItems].map((item, i) => (
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}

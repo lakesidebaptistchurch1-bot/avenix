@@ -175,21 +175,7 @@ export function HomeHero() {
         </div>
 
         {/* Navigation Arrows */}
-        <div className="flex items-center gap-3 bg-white/5 p-2 rounded-full backdrop-blur-md border border-white/10">
-          <button 
-            onClick={() => setIndex((index - 1 + slides.length) % slides.length)}
-            className="flex h-12 w-12 items-center justify-center rounded-full text-white transition-all hover:bg-brand-accent hover:text-brand-primary active:scale-90"
-          >
-            <HiArrowLeft size={20} />
-          </button>
-          <div className="h-4 w-px bg-white/20" />
-          <button 
-            onClick={() => setIndex((index + 1) % slides.length)}
-            className="flex h-12 w-12 items-center justify-center rounded-full text-white transition-all hover:bg-brand-accent hover:text-brand-primary active:scale-90"
-          >
-            <HiArrowRight size={20} />
-          </button>
-        </div>
+      
       </div>
 
       {/* Decorative Side Elements (Desktop only) */}

@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, Variants, easeOut } from "framer-motion";
 
 export function SiteFooter() {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -12,12 +12,12 @@ export function SiteFooter() {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { y: 15, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.5, ease: easeOut },
     },
   };
 
@@ -26,7 +26,7 @@ export function SiteFooter() {
       {/* Subtle Ambient Glow */}
       <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-[var(--color-brand-accent)] opacity-[0.04] rounded-full blur-[120px] -translate-y-1/2" />
 
-      <motion.div 
+      <motion.div
         className="max-w-7xl mx-auto px-6 lg:px-8 pt-20 pb-10"
         initial="hidden"
         whileInView="visible"
@@ -34,14 +34,13 @@ export function SiteFooter() {
         variants={containerVariants}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-16">
-          
           {/* 1. Brand Identity */}
           <motion.div variants={itemVariants} className="lg:col-span-4 space-y-8">
             <Link href="/" className="flex items-center gap-3">
               <img
                 src="/images/church_logo_blue-removebg-preview (1).png"
                 alt="Lakeside Baptist Church"
-                className="h-14 w-auto brightness-0 invert" // Professional white-out logo
+                className="h-14 w-auto brightness-0 invert"
               />
               <div className="flex flex-col">
                 <span className="text-xl font-bold tracking-tight leading-none text-white">
@@ -58,18 +57,17 @@ export function SiteFooter() {
               worship, grow, and impact lives through the word of God.
             </p>
 
-            {/* Social Links - Refined Iconography */}
             <div className="flex gap-3">
               {[
-                { name: "FB", url: "https://web.facebook.com/lbcghana" },
-                { name: "YT", url: "http://www.youtube.com/@lakesidebaptistchurchab1" },
-                { name: "TK", url: "https://www.tiktok.com/@lakeside.baptist" },
-                { name: "IG", url: "https://www.instagram.com/lakesidebaptistchurchab" }
+                { name: "FaceBook", url: "https://web.facebook.com/lbcghana" },
+                { name: "Youtube", url: "http://www.youtube.com/@lakesidebaptistchurchab1" },
+                { name: "Tiktok", url: "https://www.tiktok.com/@lakeside.baptist" },
+                { name: "Instagram", url: "https://www.instagram.com/lakesidebaptistchurchab" }
               ].map((social) => (
                 <a
                   key={social.name}
                   href={social.url}
-                  className="w-10 h-10 flex items-center justify-center rounded-md border border-white/10 hover:border-[var(--color-brand-accent)] hover:bg-[var(--color-brand-accent)]/10 transition-all duration-300 text-[10px] font-bold"
+                  className="w-10 h-10 flex items-center justify-center rounded-md transition-all duration-300 text-[12px] font-bold"
                 >
                   {social.name}
                 </a>
@@ -112,7 +110,7 @@ export function SiteFooter() {
             </motion.div>
           </div>
 
-          {/* 3. Contact Info - Cleanest Layout */}
+          {/* 3. Contact Info */}
           <motion.div variants={itemVariants} className="lg:col-span-4">
             <h3 className="text-white text-sm font-bold mb-6 tracking-wider uppercase">Connect</h3>
             <div className="space-y-5">
@@ -142,7 +140,7 @@ export function SiteFooter() {
           </motion.div>
         </div>
 
-        {/* Footer Bottom - Ultra Clean */}
+        {/* Footer Bottom */}
         <motion.div 
           variants={itemVariants}
           className="border-t border-white/5 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center gap-4"

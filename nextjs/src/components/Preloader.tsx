@@ -8,7 +8,6 @@ export function Preloader() {
 
   useEffect(() => {
     const timeout = setTimeout(() => setVisible(false), 1400);
-
     const handleLoad = () => setVisible(false);
     window.addEventListener("load", handleLoad);
 
@@ -21,21 +20,26 @@ export function Preloader() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center bg-brand-primary overflow-hidden">
-      {/* Subtle background overlay pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(#31475A_0.8px,transparent_1px)] bg-size-[20px_20px] opacity-30" />
+    <div
+      style={{ zIndex: 99999 }}
+      className="fixed inset-0 flex items-center justify-center bg-brand-primary overflow-hidden"
+    >
+      {/* Subtle background dot pattern */}
+      <div
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage: "radial-gradient(#31475A 0.8px, transparent 1px)",
+          backgroundSize: "20px 20px",
+        }}
+      />
 
       <div className="relative flex flex-col items-center">
-        {/* Spinning Logo Container */}
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
-          className="relative w-28 h-28 flex items-center justify-center mb-8"
-        >
-          {/* Outer spinning ring */}
+        {/* Logo Container — static, no spin */}
+        <div className="relative w-28 h-28 flex items-center justify-center mb-8">
+          {/* Spinning ring only — logo stays still */}
           <div className="absolute inset-0 border-4 border-brand-accent/30 border-t-brand-accent rounded-full animate-spin" />
 
-          {/* Logo */}
+          {/* Static Logo */}
           <div className="relative z-10 w-20 h-20 flex items-center justify-center">
             <img
               src="/images/church_logo_blue-removebg-preview (1).png"
@@ -43,7 +47,7 @@ export function Preloader() {
               className="w-full h-full object-contain drop-shadow-lg"
             />
           </div>
-        </motion.div>
+        </div>
 
         {/* Loading Text */}
         <motion.div
@@ -55,11 +59,11 @@ export function Preloader() {
           PREPARING WORSHIP EXPERIENCE
         </motion.div>
 
-        {/* Progress Bar (optional subtle indicator) */}
+        {/* Progress Bar */}
         <div className="mt-10 w-48 h-px bg-white/20 relative overflow-hidden">
           <motion.div
             className="absolute inset-0 bg-brand-accent"
-            initial={{ scaleX: 0 }}
+            initial={{ scaleX: 0, originX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1.4, ease: "easeOut" }}
           />

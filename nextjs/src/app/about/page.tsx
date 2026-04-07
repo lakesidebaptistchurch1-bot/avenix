@@ -7,7 +7,7 @@ import {
   AnimatePresence,
   useInView,
 } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, type ReactNode } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 
@@ -15,8 +15,16 @@ import { Icon } from "@/components/Icon";
    HELPERS
 ───────────────────────────────────────────── */
 
-function FadeUp({ children, delay = 0, className = "" }) {
-  const ref = useRef(null);
+function FadeUp({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   return (
     <motion.div
@@ -31,17 +39,25 @@ function FadeUp({ children, delay = 0, className = "" }) {
   );
 }
 
-function AnimatedCounter({ target, suffix = "+" }) {
-  const ref = useRef(null);
+type AnimatedCounterProps = {
+  target: number;
+  suffix?: string;
+};
+
+function AnimatedCounter({ target, suffix = "+" }: AnimatedCounterProps) {
+  const ref = useRef<HTMLSpanElement | null>(null);
   const inView = useInView(ref, { once: true });
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (!inView) return;
+
     let current = 0;
     const step = Math.ceil(target / 80);
+
     const timer = setInterval(() => {
       current += step;
+
       if (current >= target) {
         setCount(target);
         clearInterval(timer);
@@ -49,6 +65,7 @@ function AnimatedCounter({ target, suffix = "+" }) {
         setCount(current);
       }
     }, 16);
+
     return () => clearInterval(timer);
   }, [inView, target]);
 
@@ -60,13 +77,22 @@ function AnimatedCounter({ target, suffix = "+" }) {
   );
 }
 
-function ParallaxImage({ src, alt, className = "" }) {
-  const ref = useRef(null);
+type ParallaxImageProps = {
+  src: string;
+  alt: string;
+  className?: string;
+};
+
+function ParallaxImage({ src, alt, className = "" }: ParallaxImageProps) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
+
   const y = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+
   return (
     <div ref={ref} className={`overflow-hidden ${className}`}>
       <motion.img
@@ -78,8 +104,7 @@ function ParallaxImage({ src, alt, className = "" }) {
     </div>
   );
 }
-
-const Orb = ({ className }) => (
+const Orb = ({ className }: { className?: string }) => (
   <div
     className={`absolute rounded-full blur-3xl pointer-events-none ${className}`}
   />
@@ -217,10 +242,13 @@ const ABOUT_LIST = [
   { icon: "/images/icon-about-list-1.svg", label: "Share God's Love" },
   { icon: "/images/icon-about-list-2.svg", label: "Foster Spiritual Growth" },
   { icon: "/images/icon-about-list-3.svg", label: "Serve Our Community" },
-  { icon: "/images/icon-about-list-4.svg", label: "Build Strong Relationships" },
+  {
+    icon: "/images/icon-about-list-4.svg",
+    label: "Build Strong Relationships",
+  },
 ];
 
-const SOCIALS = ["facebook", "linkedin", "instagram", "twitter"];
+const SOCIALS = ["facebook", "linkedin", "instagram", "twitter"] as const;
 const CORE_IMAGES = ["/images/mimi.JPG", "/images/old.JPG", "/images/ga.JPG"];
 
 /* ─────────────────────────────────────────────
@@ -231,7 +259,7 @@ export default function AboutPage() {
   const [activeTab, setActiveTab] = useState("vision");
   const [openFaq, setOpenFaq] = useState("one");
 
-  const heroRef = useRef(null);
+  const heroRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress: heroScroll } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -240,8 +268,7 @@ export default function AboutPage() {
   const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
 
   return (
-    <div className="bg-[var(--color-site-bg)] overflow-x-hidden">
-
+    <div className="bg-site-bg overflow-x-hidden">
       {/* ══════════════════════════
           1. HERO
       ══════════════════════════ */}
@@ -250,7 +277,11 @@ export default function AboutPage() {
         className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden"
       >
         <motion.div style={{ y: heroY }} className="absolute inset-0 scale-110">
-          <img src="/images/fade.gif" alt="" className="w-full h-full object-cover" />
+          <img
+            src="/images/fade.gif"
+            alt=""
+            className="w-full h-full object-cover"
+          />
           <div className="absolute inset-0 bg-linear-to-b from-brand-primary/75 via-brand-primary/55 to-brand-primary/85" />
         </motion.div>
 
@@ -277,7 +308,11 @@ export default function AboutPage() {
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            transition={{
+              duration: 0.9,
+              delay: 0.35,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="text-5xl sm:text-7xl lg:text-8xl font-bold text-white leading-[1.05] tracking-tight mb-8"
           >
             About <span className="text-[var(--color-brand-accent)]">Us</span>
@@ -306,9 +341,7 @@ export default function AboutPage() {
             <span className="text-[var(--color-brand-accent)]">About Us</span>
           </motion.nav> */}
         </motion.div>
-
       </section>
-
 
       {/* ══════════════════════════
           2. ABOUT US
@@ -318,7 +351,6 @@ export default function AboutPage() {
 
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center">
-
             {/* Images */}
             <FadeUp className="relative">
               <div className="relative h-[520px] lg:h-[620px]">
@@ -329,17 +361,29 @@ export default function AboutPage() {
                   transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute top-0 left-0 w-[75%] h-[75%] rounded-3xl overflow-hidden shadow-2xl"
                 >
-                  <ParallaxImage src="/images/REV EDGAR.jpg" alt="Church community" className="w-full h-full" />
+                  <ParallaxImage
+                    src="/images/REV EDGAR.jpg"
+                    alt="Church community"
+                    className="w-full h-full"
+                  />
                 </motion.div>
 
                 <motion.div
                   initial={{ opacity: 0, scale: 0.92, rotate: 2 }}
                   whileInView={{ opacity: 1, scale: 1, rotate: 2 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.9, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{
+                    duration: 0.9,
+                    delay: 0.2,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                   className="absolute bottom-0 right-0 w-[65%] h-[65%] rounded-3xl overflow-hidden shadow-2xl border-4 border-white"
                 >
-                  <ParallaxImage src="/images/girls.jpg" alt="Girls" className="w-full h-full" />
+                  <ParallaxImage
+                    src="/images/girls.jpg"
+                    alt="Girls"
+                    className="w-full h-full"
+                  />
                 </motion.div>
 
                 <motion.div
@@ -368,21 +412,23 @@ export default function AboutPage() {
                 </span>
                 <h2 className="text-4xl sm:text-5xl lg:text-[3.2rem] font-bold text-[var(--color-brand-primary)] leading-[1.1] mb-6">
                   Faith, hope, and love in{" "}
-                  <span className="text-[var(--color-brand-accent)]">action every day</span>
+                  <span className="text-[var(--color-brand-accent)]">
+                    action every day
+                  </span>
                 </h2>
               </FadeUp>
 
               <FadeUp delay={0.15}>
                 <p className="text-[var(--color-site-muted)] text-lg leading-relaxed mb-5">
                   We are a vibrant community of believers dedicated to worship,
-                  fellowship, and service. Our mission is to share God&apos;s love,
-                  grow in faith, and make a positive impact in the world through
-                  compassionate outreach and meaningful connections.
+                  fellowship, and service. Our mission is to share God&apos;s
+                  love, grow in faith, and make a positive impact in the world
+                  through compassionate outreach and meaningful connections.
                 </p>
-                <p className="text-[var(--color-site-muted)] text-lg leading-relaxed mb-10">
-                  Our church is a welcoming place where everyone can find support,
-                  inspiration, and a sense of belonging. Together, we strive to
-                  live out our faith and make a difference.
+                <p className="text-site-muted text-lg leading-relaxed mb-10">
+                  Our church is a welcoming place where everyone can find
+                  support, inspiration, and a sense of belonging. Together, we
+                  strive to live out our faith and make a difference.
                 </p>
               </FadeUp>
 
@@ -390,14 +436,17 @@ export default function AboutPage() {
                 {ABOUT_LIST.map((item, i) => (
                   <FadeUp key={i} delay={0.2 + i * 0.1}>
                     <motion.div
-                      whileHover={{ x: 6, backgroundColor: "rgba(201,166,107,0.08)" }}
+                      whileHover={{
+                        x: 6,
+                        backgroundColor: "rgba(201,166,107,0.08)",
+                      }}
                       transition={{ type: "spring", stiffness: 300 }}
-                      className="flex items-center gap-4 p-4 rounded-2xl border border-[var(--color-divider-dark)] cursor-default"
+                      className="flex items-center gap-4 p-4 rounded-2xl border border-divider-dark cursor-default"
                     >
-                      <div className="w-12 h-12 rounded-xl bg-[var(--color-brand-accent-muted)] flex items-center justify-center flex-shrink-0">
+                      <div className="w-12 h-12 rounded-xl bg-brand-accent-muted flex items-center justify-center shrink-0">
                         <img src={item.icon} alt="" className="w-6 h-6" />
                       </div>
-                      <h4 className="font-semibold text-[var(--color-brand-primary)] text-[15px]">
+                      <h4 className="font-semibold text-brand-primary text-[15px]">
                         {item.label}
                       </h4>
                     </motion.div>
@@ -409,12 +458,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-
       {/* ══════════════════════════
           3. VISION / MISSION / APPROACH
       ══════════════════════════ */}
-      <section className="py-28 bg-[var(--color-brand-primary)] relative overflow-hidden">
-        <Orb className="w-[600px] h-[600px] bg-[var(--color-brand-accent)]/10 -top-32 left-1/2 -translate-x-1/2" />
+      <section className="py-28 bg-brand-primary relative overflow-hidden">
+        <Orb className="w-[600px] h-[600px] bg-brand-accent/10 -top-32 left-1/2 -translate-x-1/2" />
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -426,28 +474,31 @@ export default function AboutPage() {
 
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
           <FadeUp className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 text-[var(--color-brand-accent)] text-xs tracking-[4px] font-semibold uppercase mb-5">
-              <span className="block h-px w-8 bg-[var(--color-brand-accent)]" />
+            <span className="inline-flex items-center gap-2 text-brand-accent text-xs tracking-[4px] font-semibold uppercase mb-5">
+              <span className="block h-px w-8 bg-brand-accent" />
               Our Foundation
-              <span className="block h-px w-8 bg-[var(--color-brand-accent)]" />
+              <span className="block h-px w-8 bg-brand-accent" />
             </span>
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight max-w-3xl mx-auto">
               Building Faithful Community Through Love, Service,{" "}
-              <span className="text-[var(--color-brand-accent)]">
+              <span className="text-brand-accent">
                 Worship, and Fellowship.
               </span>
             </h2>
           </FadeUp>
 
-          <FadeUp delay={0.15} className="flex flex-wrap justify-center gap-3 mb-14">
+          <FadeUp
+            delay={0.15}
+            className="flex flex-wrap justify-center gap-3 mb-14"
+          >
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-8 py-3 rounded-full text-sm font-semibold tracking-wide transition-all duration-300 ${
                   activeTab === tab.id
-                    ? "bg-[var(--color-brand-accent)] text-[var(--color-brand-primary)]"
-                    : "border border-white/20 text-white/70 hover:border-[var(--color-brand-accent)] hover:text-[var(--color-brand-accent)]"
+                    ? "bg-brand-accent text-brand-primary"
+                    : "border border-white/20 text-white/70 hover:border-brand-accent hover:text-brand-accent"
                 }`}
               >
                 {tab.label}
@@ -468,15 +519,17 @@ export default function AboutPage() {
                 <div>
                   <h3 className="text-3xl sm:text-4xl font-bold text-white leading-snug mb-6">
                     {tab.heading}
-                    <span className="text-[var(--color-brand-accent)]">{tab.accent}</span>
+                    <span className="text-brand-accent">{tab.accent}</span>
                   </h3>
                   <p className="text-white/90 text-xl font-medium leading-relaxed mb-5">
                     {tab.subtitle}
                   </p>
-                  <p className="text-white/60 text-base leading-relaxed">{tab.body}</p>
+                  <p className="text-white/60 text-base leading-relaxed">
+                    {tab.body}
+                  </p>
                   <Link
                     href="/services"
-                    className="mt-10 inline-flex items-center gap-3 text-[var(--color-brand-accent)] font-semibold"
+                    className="mt-10 inline-flex items-center gap-3 text-brand-accent font-semibold"
                   >
                     Learn More
                     <motion.span
@@ -489,15 +542,18 @@ export default function AboutPage() {
                 </div>
 
                 <div className="relative h-72 sm:h-96 lg:h-[460px] rounded-3xl overflow-hidden">
-                  <ParallaxImage src={tab.img} alt={tab.label} className="w-full h-full" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-brand-primary)]/50 to-transparent" />
+                  <ParallaxImage
+                    src={tab.img}
+                    alt={tab.label}
+                    className="w-full h-full"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-brand-primary/50 to-transparent" />
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
       </section>
-
 
       {/* ══════════════════════════
           4. COUNTERS
@@ -509,17 +565,22 @@ export default function AboutPage() {
             {COUNTERS.map((c, i) => (
               <FadeUp key={i} delay={i * 0.12}>
                 <motion.div
-                  whileHover={{ y: -8, boxShadow: "0 24px 60px rgba(44,62,80,0.12)" }}
+                  whileHover={{
+                    y: -8,
+                    boxShadow: "0 24px 60px rgba(44,62,80,0.12)",
+                  }}
                   transition={{ type: "spring", stiffness: 250 }}
-                  className="p-8 rounded-3xl border border-[var(--color-divider-dark)] bg-white text-center group cursor-default"
+                  className="p-8 rounded-3xl border border-divider-dark bg-white text-center group cursor-default"
                 >
-                  <div className="text-5xl sm:text-6xl font-bold text-[var(--color-brand-primary)] mb-2 group-hover:text-[var(--color-brand-accent)] transition-colors duration-300">
+                  <div className="text-5xl sm:text-6xl font-bold text-brand-primary mb-2 group-hover:text-brand-accent transition-colors duration-300">
                     <AnimatedCounter target={c.value} suffix={c.suffix} />
                   </div>
-                  <h4 className="text-xs font-bold text-[var(--color-brand-secondary)] uppercase tracking-widest mb-3">
+                  <h4 className="text-xs font-bold text-brand-secondary uppercase tracking-widest mb-3">
                     {c.label}
                   </h4>
-                  <p className="text-[var(--color-site-muted)] text-sm leading-relaxed">{c.desc}</p>
+                  <p className="text-site-muted text-sm leading-relaxed">
+                    {c.desc}
+                  </p>
                 </motion.div>
               </FadeUp>
             ))}
@@ -527,22 +588,21 @@ export default function AboutPage() {
         </div>
       </section>
 
-
       {/* ══════════════════════════
           5. WHAT WE DO
       ══════════════════════════ */}
-      <section className="py-28 bg-[var(--color-site-bg)] relative overflow-hidden">
-        <Orb className="w-80 h-80 bg-[var(--color-brand-secondary)]/10 bottom-0 left-0" />
+      <section className="py-28 bg-site-bg relative overflow-hidden">
+        <Orb className="w-80 h-80 bg-brand-secondary/10 bottom-0 left-0" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <FadeUp className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 text-[var(--color-brand-secondary)] text-xs tracking-[4px] font-semibold uppercase mb-4">
-              <span className="block h-px w-8 bg-[var(--color-brand-secondary)]" />
+            <span className="inline-flex items-center gap-2 text-brand-secondary text-xs tracking-[4px] font-semibold uppercase mb-4">
+              <span className="block h-px w-8 bg-brand-secondary" />
               What We Do
             </span>
-            <h2 className="text-4xl sm:text-5xl font-bold text-[var(--color-brand-primary)]">
+            <h2 className="text-4xl sm:text-5xl font-bold text-brand-primary">
               Living Our{" "}
-              <span className="text-[var(--color-brand-accent)]">Faith Together</span>
+              <span className="text-brand-accent">Faith Together</span>
             </h2>
           </FadeUp>
 
@@ -554,15 +614,19 @@ export default function AboutPage() {
                   transition={{ type: "spring", stiffness: 220 }}
                   className="group relative bg-white rounded-3xl p-10 shadow-[0_4px_30px_rgba(0,0,0,0.06)] hover:shadow-[0_20px_60px_rgba(44,62,80,0.14)] transition-shadow duration-500 overflow-hidden"
                 >
-                  <div className="absolute top-0 left-0 w-full h-1 bg-[var(--color-brand-accent)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
-                  <div className="w-16 h-16 rounded-2xl bg-[var(--color-brand-accent-muted)] flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
+                  <div className="absolute top-0 left-0 w-full h-1 bg-brand-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
+                  <div className="w-16 h-16 rounded-2xl bg-brand-accent-muted flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
                     <img src={w.icon} alt="" className="w-8 h-8" />
                   </div>
-                  <h3 className="text-xl font-bold text-[var(--color-brand-primary)] mb-4">{w.title}</h3>
-                  <p className="text-[var(--color-site-muted)] leading-relaxed text-[15px]">{w.desc}</p>
+                  <h3 className="text-xl font-bold text-brand-primary mb-4">
+                    {w.title}
+                  </h3>
+                  <p className="text-site-muted leading-relaxed text-[15px]">
+                    {w.desc}
+                  </p>
                   <Link
                     href={w.href}
-                    className="mt-8 inline-flex items-center gap-2 text-[var(--color-brand-secondary)] text-sm font-semibold group-hover:text-[var(--color-brand-accent)] transition-colors"
+                    className="mt-8 inline-flex items-center gap-2 text-brand-secondary text-sm font-semibold group-hover:text-brand-accent transition-colors"
                   >
                     Explore &rarr;
                   </Link>
@@ -572,7 +636,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
 
       {/* ══════════════════════════
           6. OUR TEAM
@@ -586,7 +649,9 @@ export default function AboutPage() {
             </span>
             <h2 className="text-4xl sm:text-5xl font-bold text-[var(--color-brand-primary)]">
               Meet Our{" "}
-              <span className="text-[var(--color-brand-accent)]">Pastors &amp; Deacons</span>
+              <span className="text-[var(--color-brand-accent)]">
+                Pastors &amp; Deacons
+              </span>
             </h2>
           </FadeUp>
 
@@ -632,17 +697,19 @@ export default function AboutPage() {
         </div>
       </section>
 
-
       {/* ══════════════════════════
           7. PASTOR'S MESSAGE
       ══════════════════════════ */}
       <section className="py-28 bg-[var(--color-site-bg)] relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-
             <FadeUp className="relative">
               <div className="relative rounded-3xl overflow-hidden h-[460px] lg:h-[580px]">
-                <ParallaxImage src="/images/lol1 (2).jpg" alt="Pastor" className="w-full h-full" />
+                <ParallaxImage
+                  src="/images/lol1 (2).jpg"
+                  alt="Pastor"
+                  className="w-full h-full"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-brand-primary)]/30 to-transparent" />
               </div>
               <motion.div
@@ -664,29 +731,39 @@ export default function AboutPage() {
                 </span>
                 <h2 className="text-4xl sm:text-5xl font-bold text-[var(--color-brand-primary)] leading-tight mb-8">
                   Your generosity makes a{" "}
-                  <span className="text-[var(--color-brand-accent)]">profound impact</span>
+                  <span className="text-[var(--color-brand-accent)]">
+                    profound impact
+                  </span>
                 </h2>
               </FadeUp>
 
               <FadeUp delay={0.15}>
                 <p className="text-[var(--color-brand-primary)] font-semibold text-xl leading-relaxed mb-6">
-                  Our mission is to share God&apos;s love, foster spiritual growth,
-                  and serve our community with compassion and purpose.
+                  Our mission is to share God&apos;s love, foster spiritual
+                  growth, and serve our community with compassion and purpose.
                 </p>
                 <p className="text-[var(--color-site-muted)] text-lg leading-relaxed mb-12">
-                  We would love to get to know you better. Feel free to reach out
-                  to us through our Contact Us page, or join us for one of our
-                  upcoming services or events. Our doors are always open, and we
-                  look forward to welcoming you into our church family.
+                  We would love to get to know you better. Feel free to reach
+                  out to us through our Contact Us page, or join us for one of
+                  our upcoming services or events. Our doors are always open,
+                  and we look forward to welcoming you into our church family.
                 </p>
               </FadeUp>
 
               <FadeUp delay={0.25}>
                 <div className="flex items-center gap-6 mb-10">
-                  <img src="/images/pastors-signature.svg" alt="Signature" className="h-14 opacity-70" />
+                  <img
+                    src="/images/pastors-signature.svg"
+                    alt="Signature"
+                    className="h-14 opacity-70"
+                  />
                   <div>
-                    <p className="text-[var(--color-brand-primary)] font-bold">Senior Pastor</p>
-                    <p className="text-[var(--color-site-muted)] text-sm">Lakeside Baptist Church</p>
+                    <p className="text-[var(--color-brand-primary)] font-bold">
+                      Senior Pastor
+                    </p>
+                    <p className="text-[var(--color-site-muted)] text-sm">
+                      Lakeside Baptist Church
+                    </p>
                   </div>
                 </div>
               </FadeUp>
@@ -703,7 +780,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
 
       {/* ══════════════════════════
           8. CORE VALUES
@@ -722,12 +798,13 @@ export default function AboutPage() {
           <FadeUp className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-white">
               Foundations of Our Faith and{" "}
-              <span className="text-[var(--color-brand-accent)]">Community Life</span>
+              <span className="text-[var(--color-brand-accent)]">
+                Community Life
+              </span>
             </h2>
           </FadeUp>
 
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-
             <FadeUp>
               <div className="space-y-3">
                 {FAQS.map((faq) => (
@@ -737,7 +814,9 @@ export default function AboutPage() {
                     className="rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm"
                   >
                     <button
-                      onClick={() => setOpenFaq(openFaq === faq.id ? "" : faq.id)}
+                      onClick={() =>
+                        setOpenFaq(openFaq === faq.id ? "" : faq.id)
+                      }
                       className="w-full flex items-center justify-between gap-4 p-6 text-left"
                     >
                       <span className="text-white font-semibold text-[15px] leading-snug">
@@ -759,7 +838,10 @@ export default function AboutPage() {
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                          transition={{
+                            duration: 0.35,
+                            ease: [0.22, 1, 0.36, 1],
+                          }}
                           className="overflow-hidden"
                         >
                           <p className="px-6 pb-6 text-white/65 text-[15px] leading-relaxed border-t border-white/10 pt-4">
@@ -773,7 +855,7 @@ export default function AboutPage() {
               </div>
             </FadeUp>
 
-            <FadeUp delay={0.2}>
+            {/* <FadeUp delay={0.2}>
               <div className="relative h-[380px] sm:h-[500px]">
                 {CORE_IMAGES.map((src, i) => (
                   <motion.div
@@ -794,11 +876,10 @@ export default function AboutPage() {
                   Hover to explore
                 </p>
               </div>
-            </FadeUp>
+            </FadeUp> */}
           </div>
         </div>
       </section>
-
 
       {/* ══════════════════════════
           9. CTA STRIP
@@ -835,7 +916,6 @@ export default function AboutPage() {
           </FadeUp>
         </div>
       </section> */}
-
     </div>
   );
 }
