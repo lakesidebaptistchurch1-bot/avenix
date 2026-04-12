@@ -17,10 +17,9 @@ import {
 
 export default function MinistrySinglePage() {
   // Embla Carousel setup with autoplay
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true },
-    [Autoplay({ delay: 4500, stopOnInteraction: true })]
-  );
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
+    Autoplay({ delay: 4500, stopOnInteraction: true }),
+  ]);
 
   const scrollPrev = useCallback(() => {
     if (!emblaApi) return;
@@ -104,9 +103,9 @@ export default function MinistrySinglePage() {
               <div className="embla" ref={emblaRef}>
                 <div className="embla__container flex">
                   {[
-                    "/images/ministries-img-1.jpg",
-                    "/images/ministries-img-2.jpg",
-                    "/images/ministries-img-3.jpg",
+                    "/images/Afia.jpg",
+                    "/images/khady.jpg",
+                    "/images/Music.jpg",
                   ].map((src, i) => (
                     <div key={i} className="embla__slide flex-[0_0_100%]">
                       <div className="relative h-[520px]">
@@ -255,7 +254,7 @@ export default function MinistrySinglePage() {
                   ].map((item, i) => (
                     <details
                       key={i}
-                      className="group bg-white border border-gray-200 rounded-2xl shadow-[var(--shadow-card)] transition-all"
+                      className="group bg-white border border-gray-200 p-9 rounded-2xl shadow-[var(--shadow-card)] transition-all"
                     >
                       <summary className="flex items-center justify-between cursor-pointer list-none font-medium text-lg">
                         {item.q}

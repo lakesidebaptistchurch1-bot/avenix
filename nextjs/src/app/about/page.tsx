@@ -394,7 +394,7 @@ export default function AboutPage() {
                   className="absolute top-[46%] right-[8%] bg-[var(--color-brand-primary)] text-white rounded-2xl p-5 shadow-2xl z-10 text-center"
                 >
                   <p className="text-4xl font-bold text-[var(--color-brand-accent)] leading-none">
-                    50+
+                    16
                   </p>
                   <p className="text-[10px] tracking-widest text-white/70 uppercase mt-2">
                     Years of Grace
@@ -561,7 +561,7 @@ export default function AboutPage() {
       <section className="py-24 bg-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(201,166,107,0.07),transparent_60%)]" />
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {/* <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {COUNTERS.map((c, i) => (
               <FadeUp key={i} delay={i * 0.12}>
                 <motion.div
@@ -584,7 +584,7 @@ export default function AboutPage() {
                 </motion.div>
               </FadeUp>
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -640,7 +640,7 @@ export default function AboutPage() {
       {/* ══════════════════════════
           6. OUR TEAM
       ══════════════════════════ */}
-      <section className="py-28 bg-white">
+      {/* <section className="py-28 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <FadeUp className="text-center mb-16">
             <span className="inline-flex items-center gap-2 text-[var(--color-brand-secondary)] text-xs tracking-[4px] font-semibold uppercase mb-4">
@@ -695,7 +695,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* ══════════════════════════
           7. PASTOR'S MESSAGE
@@ -805,7 +805,7 @@ export default function AboutPage() {
           </FadeUp>
 
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-            <FadeUp>
+            {/* <FadeUp>
               <div className="space-y-3">
                 {FAQS.map((faq) => (
                   <motion.div
@@ -853,7 +853,7 @@ export default function AboutPage() {
                   </motion.div>
                 ))}
               </div>
-            </FadeUp>
+            </FadeUp> */}
 
             {/* <FadeUp delay={0.2}>
               <div className="relative h-[380px] sm:h-[500px]">
