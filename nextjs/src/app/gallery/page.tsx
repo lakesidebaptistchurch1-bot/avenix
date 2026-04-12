@@ -59,7 +59,7 @@ export default function GalleryPage() {
       <GalleryStyles />
 
       {/* ── Hero with Requested Gradient ─────────────────────────────── */}
-      <section className="gl-hero bg-gradient-to-b from-[var(--color-brand-primary)]/75 via-[var(--color-brand-primary)]/55 to-[var(--color-brand-primary)]/85">
+      <section className="gl-hero bg-linear-to-b from-brand-primary/75 via-brand-primary/55 to-brand-primary/85">
         <div className="gl-hero-bg" aria-hidden="true">
           <div className="gl-orb gl-orb-a opacity-20" />
           <div className="gl-orb gl-orb-b opacity-10" />

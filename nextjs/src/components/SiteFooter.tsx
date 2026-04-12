@@ -22,9 +22,9 @@ export function SiteFooter() {
   };
 
   return (
-    <footer className="relative bg-[var(--color-brand-primary)] text-white overflow-hidden border-t border-white/5">
+    <footer className="relative bg-brand-primary text-white overflow-hidden border-t border-white/5">
       {/* Subtle Ambient Glow */}
-      <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-[var(--color-brand-accent)] opacity-[0.04] rounded-full blur-[120px] -translate-y-1/2" />
+      <div className="absolute top-0 left-1/4 w-[400px] h-[400px] bg-brand-accent opacity-[0.04] rounded-full blur-[120px] -translate-y-1/2" />
 
       <motion.div
         className="max-w-7xl mx-auto px-6 lg:px-8 pt-20 pb-10"
@@ -46,7 +46,7 @@ export function SiteFooter() {
                 <span className="text-xl font-bold tracking-tight leading-none text-white">
                   Lakeside
                 </span>
-                <span className="text-sm font-medium tracking-[0.2em] text-[var(--color-brand-accent)] uppercase mt-1">
+                <span className="text-sm font-medium tracking-[0.2em] text-brand-accent uppercase mt-1">
                   Baptist Church
                 </span>
               </div>
@@ -84,7 +84,7 @@ export function SiteFooter() {
                   <li key={link}>
                     <Link 
                       href={link === 'Home' ? '/' : `/${link.toLowerCase().replace(' ', '')}`}
-                      className="text-white/40 hover:text-[var(--color-brand-accent)] transition-colors text-sm font-medium inline-block"
+                      className="text-white/40 hover:text-brand-accent transition-colors text-sm font-medium inline-block"
                     >
                       {link}
                     </Link>
@@ -100,7 +100,7 @@ export function SiteFooter() {
                   <li key={link}>
                     <Link 
                       href="#" 
-                      className="text-white/40 hover:text-[var(--color-brand-accent)] transition-colors text-sm font-medium inline-block"
+                      className="text-white/40 hover:text-brand-accent transition-colors text-sm font-medium inline-block"
                     >
                       {link}
                     </Link>
@@ -115,7 +115,7 @@ export function SiteFooter() {
             <h3 className="text-white text-sm font-bold mb-6 tracking-wider uppercase">Connect</h3>
             <div className="space-y-5">
               <div className="flex items-start gap-4">
-                <span className="text-[var(--color-brand-accent)] text-lg">✦</span>
+                <span className="text-brand-accent text-lg">✦</span>
                 <div>
                   <p className="text-[10px] text-white/30 uppercase font-bold tracking-widest mb-1">Visit Us</p>
                   <p className="text-white/70 text-sm leading-relaxed">
@@ -125,13 +125,13 @@ export function SiteFooter() {
               </div>
 
               <div className="flex items-start gap-4">
-                <span className="text-[var(--color-brand-accent)] text-lg">✦</span>
+                <span className="text-brand-accent text-lg">✦</span>
                 <div>
                   <p className="text-[10px] text-white/30 uppercase font-bold tracking-widest mb-1">Contact</p>
-                  <a href="tel:+233248383745" className="text-white/70 hover:text-[var(--color-brand-accent)] transition-colors text-sm block mb-1">
+                  <a href="tel:+233248383745" className="text-white/70 hover:text-brand-accent transition-colors text-sm block mb-1">
                     (+233) 24 838 3745
                   </a>
-                  <a href="mailto:lakesidebaptistchurch1@gmail.com" className="text-white/70 hover:text-[var(--color-brand-accent)] transition-colors text-sm truncate block max-w-[240px]">
+                  <a href="mailto:lakesidebaptistchurch1@gmail.com" className="text-white/70 hover:text-brand-accent transition-colors text-sm truncate block max-w-[240px]">
                     lakesidebaptistchurch1@gmail.com
                   </a>
                 </div>

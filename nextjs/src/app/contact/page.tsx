@@ -62,7 +62,7 @@ export default function ContactPage() {
               {
                 icon: '✉',
                 label: 'Email Us',
-                value: 'edjayden2@gmail.com',
+                value: 'lakesidebaptistchurch1@gmail.com',
                 sub: 'We reply within 24 hours',
                 color: '#8C6A4F',
               },

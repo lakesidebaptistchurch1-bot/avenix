@@ -21,19 +21,19 @@ import {
 export default function ServicesPage() {
   const serviceTimes = [
     { day: "Sunday", time: "8:00 – 11:00 AM", label: "Main Worship Service", icon: <FaChurch /> },
-    { day: "Wednesday", time: "7:00 PM", label: "Midweek Prayer", icon: <FaPray /> },
+    { day: "Wednesday", time: "7:00 am - 8:30 am", label: "Midweek Prayer", icon: <FaPray /> },
     { day: "Online", time: "Every Sunday", label: "Live Stream Available", icon: <FaBroadcastTower /> },
   ];
 
   const ministries = [
     { icon: <FaChild />, title: "Children's Ministry", desc: "Fun and faith-building for kids" },
     { icon: <FaFire />, title: "Youth Ministry", desc: "Empowering young leaders" },
-    { icon: <FaHeart />, title: "Marriage & Family", desc: "Strong families in Christ" },
+    { icon: <FaHeart />, title: "Marriage & Family life", desc: "Strong families in Christ" },
     { icon: <FaMusic />, title: "Worship Team", desc: "Leading spirit-filled worship" },
     { icon: <FaGlobe />, title: "Outreach & Missions", desc: "Impacting communities" },
     { icon: <FaBook />, title: "Bible Study", desc: "Grow deeper in the Word" },
-    { icon: <FaGraduationCap />, title: "School of Ministry", desc: "Leadership training" },
-    { icon: <FaUserFriends />, title: "Men's Fellowship", desc: "Brotherhood & growth" },
+    { icon: <FaUserFriends />, title: "Women's Ministry", desc: "Sisterhood & growth" },
+    { icon: <FaUserFriends />, title: "Men's Ministry", desc: "Brotherhood & growth" },
   ];
 
   return (
@@ -133,11 +133,11 @@ export default function ServicesPage() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
               whileHover={{ y: -12 }}
-              className="group p-9 rounded-3xl bg-white border border-neutral-100 shadow hover:border-brand-accent/30 hover:shadow-xl transition-all duration-300 flex flex-col"
+              className="group p-9 rounded-3xl bg-white border border-neutral-100 shadow hover:border-brand-accent/30 hover:shadow-xl transition-all duration-300 flex flex-col w-full"
             >
               <div className="text-brand-secondary text-4xl mb-6 group-hover:scale-110 transition-transform">{m.icon}</div>
               <h3 className="text-2xl font-bold text-brand-primary mb-4">{m.title}</h3>
-              <p className="text-site-muted text-[15px] leading-relaxed flex-grow">{m.desc}</p>
+              <p className="text-site-muted text-[15px] leading-relaxed grow">{m.desc}</p>
               <Link
                 href="/ministries"
                 className="mt-8 text-brand-accent font-bold text-xs uppercase tracking-widest hover:text-brand-primary inline-flex items-center gap-2 group-hover:gap-3 transition-all"
