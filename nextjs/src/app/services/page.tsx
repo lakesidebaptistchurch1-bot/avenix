@@ -32,7 +32,7 @@ export default function ServicesPage() {
     { icon: <FaMusic />, title: "Worship Team", desc: "Leading spirit-filled worship" },
     { icon: <FaGlobe />, title: "Outreach & Missions", desc: "Impacting communities" },
     { icon: <FaBook />, title: "Bible Study", desc: "Grow deeper in the Word" },
-    { icon: <FaUserFriends />, title: "Women's Ministry", desc: "Leadership training" },
+    { icon: <FaUserFriends />, title: "Women's Ministry", desc: "Sisterhood & growth" },
     { icon: <FaUserFriends />, title: "Men's Ministry", desc: "Brotherhood & growth" },
   ];
 

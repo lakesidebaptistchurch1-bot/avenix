@@ -37,7 +37,7 @@ export function SiteHeader() {
 
   return (
     <header 
-      className={`fixed inset-x-0 top-0 z-[100] transition-all duration-500 ${
+      className={`fixed inset-x-0 top-0 z-100 transition-all duration-500 ${
         scrolled 
         ? "py-3 bg-brand-primary/80 backdrop-blur-xl border-b border-white/10 shadow-2xl" 
         : "py-6 bg-transparent"
@@ -45,7 +45,7 @@ export function SiteHeader() {
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-12 flex items-center justify-between">
         {/* Logo Section */}
-        <Link href="/" className="flex items-center gap-3 group relative z-[110]">
+        <Link href="/" className="flex items-center gap-3 group relative z-110">
           <div className="relative h-12 w-12 overflow-hidden rounded-xl bg-white/10 p-1 backdrop-blur-md transition-transform group-hover:scale-110">
             <img
               src="/images/church_logo_blue-removebg-preview (1).png"
@@ -120,7 +120,7 @@ export function SiteHeader() {
             href="/donation"
             className="group relative overflow-hidden rounded-full bg-brand-accent px-8 py-2.5 text-sm font-bold text-brand-primary transition-all hover:pr-10"
           >
-            <span className="relative z-10">GIVE ONLINE</span>
+            <span className="relative z-10">DONATE NOW</span>
             <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 transition-all group-hover:opacity-100">→</div>
           </Link>
         </div>
@@ -128,7 +128,7 @@ export function SiteHeader() {
         {/* Mobile Toggle */}
         <button 
           onClick={() => setMobileOpen(!mobileOpen)} 
-          className="lg:hidden relative z-[110] p-2 text-white"
+          className="lg:hidden relative z-110 p-2 text-white"
         >
           {mobileOpen ? <HiX size={32} /> : <HiMenuAlt3 size={32} />}
         </button>
@@ -142,7 +142,7 @@ export function SiteHeader() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[100] flex flex-col  bg-brand-primary p-8 lg:hidden"
+            className="fixed inset-0 z-100 flex flex-col  bg-brand-primary p-8 lg:hidden"
           >
             <div className="mt-20 flex flex-col items-center gap-6">
               {[...mainNavItems, ...pagesDropdownItems].map((item, i) => (
